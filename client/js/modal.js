@@ -1,3 +1,4 @@
+
  Template.modal.helpers({
     tasks: [
       { text: "This is task 1" },
@@ -9,3 +10,4 @@
       { user: "Crafty Beaver" },
       { user: "Nom noms" }]
   });
+ 
