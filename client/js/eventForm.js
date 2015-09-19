@@ -1,3 +1,13 @@
+Template.eventForm.rendered = function() {
+  HTTP.get(Meteor.absoluteUrl("assets/buildings.json"), function(err,result) {
+      var input = document.getElementById("eventLocation");
+      var buildings = result.data;
+      new Awesomplete(input, {
+        list: _.pluck(buildings, 'Name')
+      });
+  });
+};
+
 Template.eventForm.events({
   'submit form': function(evt) {
   	evt.preventDefault();
