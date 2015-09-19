@@ -1,5 +1,6 @@
 .content-section-a {
-  margin-top: 40px;
+  margin-top: 20px;
+  padding-bottom: 100px;
   padding-top: 80px;
   .list-group-item a {
     color: black;
@@ -8,7 +9,9 @@
       text-decoration: none;
     }
   }
+  background-color: white;
 }
+
 
 #map {
   height: 70vh;
@@ -18,7 +21,8 @@
 }
 
 .intro-header {
-  background: url(http://lorempixel.com/1920/1920/city/1) no-repeat center center;
+  background: url(https://upload.wikimedia.org/wikipedia/commons/4/40/Cornell_University_arts_quad.JPG) no-repeat center center;
+  background-size: 100% 100%;
 }
 
 .topnav {
