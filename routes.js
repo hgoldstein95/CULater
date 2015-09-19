@@ -9,3 +9,7 @@ Router.route('/', function () {
 Router.route('/modal', function() {
 	this.render('modal');
 });
+
+Router.route('/login', function() {
+	this.render('login');
+});
