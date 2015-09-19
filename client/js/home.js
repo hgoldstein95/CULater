@@ -92,7 +92,7 @@ Template.home.helpers({
     	var d = new Date();
     	var tM = 60*d.getHours() + d.getMinutes();
     	var diff = totalMinutes - tM
-  		if( Math.floor(diff/60) == 1){
+  		if( Math.floor(diff/60) <= 1){
   			return "hour";
   		}
     	return "hours";
