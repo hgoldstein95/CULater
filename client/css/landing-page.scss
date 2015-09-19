@@ -22,7 +22,7 @@ h6 {
 }
 
 .topnav {
-    font-size: 14px; 
+    font-size: 14px;
 }
 
 .lead {
@@ -95,12 +95,9 @@ h6 {
 .content-section-a {
     padding: 50px 0;
     background-color: #f8f8f8;
-}
-
-.content-section-b {
-    padding: 50px 0;
-    border-top: 1px solid #e7e7e7;
-    border-bottom: 1px solid #e7e7e7;
+    .badge a {
+      color: white;
+    }
 }
 
 .section-heading {
