@@ -2,31 +2,11 @@ var central_campus = {lat: 42.447578, lng: -76.480256};
 var map;
 var events = [];
 var markers = {};
-var info;
 
 Template.home.onCreated(function(){
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
-
-		// Create generic InfoWindow
-		info = new google.maps.InfoWindow();
-
-		// Create Markers
-		for (var i = 0; i < events.length; i++){
-			(function (){
-				var marker = new google.maps.Marker({
-			  		position: {lat: events[i].latitude, lng: events[i].longitude},
-			  		map: map.instance,
-			  		title: events[i].name + " at " + events[i].startTime
-			  		//, icon: images/img.png
-			  	});
-			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
-			  	markers[events[i]._id] = marker;
-			}())
-		}
 
 		// Make the map reactive
 		Events.find().observe({
@@ -34,11 +14,21 @@ Template.home.onCreated(function(){
 				var marker = new google.maps.Marker({
 			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
 			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime
+			  		title: newEvent.name + " at " + newEvent.startTime,
+			  		icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
+			  		var div = $("#"+newEvent._id);
+			  		if (!div.hasClass("in")){
+			  			var openDivs = $(".collapse.in");
+			  			if (openDivs[0] != undefined){
+			  				markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+			  				openDivs.removeClass("in");
+			  			}
+			  			div.addClass("in");
+			  			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+			  		}
+			  	});
 			  	markers[newEvent._id] = marker;
 			},
 			removed: function (oldEvent) {
@@ -56,11 +46,21 @@ Template.home.onCreated(function(){
 				var marker = new google.maps.Marker({
 			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
 			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime
+			  		title: newEvent.name + " at " + newEvent.startTime,
+			  		icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
+			  		var div = $("#"+newEvent._id);
+			  		if (!div.hasClass("in")){
+			  			var openDivs = $(".collapse.in");
+			  			if (openDivs[0] != undefined){
+			  				markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+			  				openDivs.removeClass("in");
+			  			}
+			  			div.addClass("in");
+			  			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+			  		}
+			  	});
 			  	markers[newEvent._id] = marker;
 			}
 		});
