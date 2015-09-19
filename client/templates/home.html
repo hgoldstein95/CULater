@@ -1,7 +1,6 @@
 <template name='home'>
   {{> nav}}
     <!-- Page Content -->
-
 	<a  name="services"></a>
     <div class="content-section-a">
         <div class="container">
@@ -16,8 +15,18 @@
 
                 <div class="col-lg-4 col-sm-12">
                 <div id='new-event' class="btn btn-default" data-toggle="modal" data-target="#form-modal">Add Event +</div>
-                <div id='my-events-button' class="btn btn-default">My Events</div>
-                <div id='all-events-button' class="btn btn-default" style="display:none;">All Events</div>
+                
+              
+               
+
+                <div id="label-switch" class="make-switch" >
+                    <input id="event-checkbox" name="my-checkbox" type="checkbox" checked>
+                    {{checked}}
+                </div>
+                
+
+
+
                   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                     {{#each events}}
