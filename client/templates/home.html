@@ -8,25 +8,27 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-sm-12">
-                  <div id="map"></div>
+                  <div id="map">
+                  	{{> googleMap name="map" options=mapOptions}}
+                  </div>
                 </div>
                 <div class="col-lg-4 col-sm-12">
                   <ul class="list-group">
                     <li class="list-group-item">
-                      <span class="badge"><a href="">3 mi</a></span>
-                      CHEM 2090 Study Group
+                      <span class="badge">3 mi</span>
+                      <a href="">CHEM 2090 Study Group</a>
                     </li>
                     <li class="list-group-item">
-                      <span class="badge"><a href="">1 mi</a></span>
-                      Smash Party
+                      <span class="badge">1 mi</span>
+                      <a href="">Smash Party</a>
                     </li>
                     <li class="list-group-item">
-                      <span class="badge"><a href="">0.5 mi</a></span>
-                      Big Red Hacks
+                      <span class="badge">0.5 mi</span>
+                      <a href="">Big Red Hacks</a>
                     </li>
                     <li class="list-group-item">
-                      <span class="badge"><a href="">4 mi</a></span>
-                      A Cappella Tryouts
+                      <span class="badge">4 mi</span>
+                      <a href="">A Cappella Tryouts</a>
                     </li>
                   </ul>
                 </div>
@@ -34,7 +36,49 @@
 
         </div>
         <!-- /.container -->
-
+    <div class="container">
+      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    	  MODAL, YAY!
+    	</button>
+    </div>
     </div>
     <!-- /.content-section-a -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Smash Party</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="info">
+              <div id="time"><span id="info-name"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Time: </span><span id="info-data">10:00 AM - 5:00PM</span></div>
+              <div id="place"><span id="info-name"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Place: </span><span id="info-data">Duffield Hall</span></div>
+              <div id="info-description"><span id="info-name">Description</span><br>
+              <span id="info-data">
+              Come one, come all! Play Smash Bros.<br>
+              HULK SMASH! HULK SMASH! HULK SMASH! <br>
+              Lorem ipsum dolor sit amet, vocibus lucilius comprehensam duo cu, his modo enim graeci an. Nobis soleat mel ut. Cu quod veritus detracto eam, ea inimicus expetendis neglegentur has. Ne oratio principes mei, cu tollit reprimique usu.<br><br></span></div>
+
+              Who else is going?
+              <ul>
+                {{#each users}}
+                <li>{{this.user}}</li>
+                {{/each}}
+            </ul>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            JOIN?
+            <button type="button" class="btn btn-primary">YES</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
 </template>
