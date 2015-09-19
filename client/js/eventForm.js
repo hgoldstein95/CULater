@@ -19,17 +19,13 @@ Template.eventForm.events({
   	}
   	var location = evt.target.eventLocation.value;
   	var date = evt.target.eventDate.value;
-  	if(evt.target.eventStartTime){
-  		var startTime = evt.target.eventStartTime.value;
-  	}
-  	if(evt.target.eventEndTime){
-  		var endTime = evt.target.eventEndTime.value;
-  	}
+  	var startTime = evt.target.eventStartTime.value;
+  	var endTime = evt.target.eventEndTime.value;
   	var attendees = [];
-  	var eventDate = new Date(date.split("-")[0],date.split("-")[1],date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
-  	var endDate = new Date(date.split("-")[0],date.split("-")[1],date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
+  	var eventDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
+  	var endDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
   	var currentDate = new Date();
-  	if(eventDate < currentDate || endDate <= eventDate || !name || !location || !date){
+  	if(eventDate < currentDate || endDate <= eventDate || !name || !location || !date || !startTime || !endTime){
   		$("#error-messages").show();
   		return;
   	}
@@ -51,8 +47,8 @@ Template.eventForm.events({
     	name: name,
     	description: description,
     	location: location,
-      latitude: latitude,
-      longitude: longitude,
+      	latitude: latitude,
+      	longitude: longitude,
     	date: date,
     	startTime: startTime,
     	endTime: endTime,

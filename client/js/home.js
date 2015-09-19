@@ -146,10 +146,10 @@ Template.home.helpers({
     	date=Event.date;
     	startTime=Event.startTime;
     	endTime=Event.endTime;
-    	var eventDate = new Date(date.split("-")[0],date.split("-")[1],date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
-		var endDate = new Date(date.split("-")[0],date.split("-")[1],date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
+    	var eventDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
+		var endDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
 		var currentDate = new Date();
-		if(eventDate < currentDate || endDate <= eventDate){
+		if(endDate <= currentDate){
 			Events.remove({
 				_id: Event._id
 			})
