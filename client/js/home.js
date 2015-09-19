@@ -1,9 +1,3 @@
-Template.home.helpers({
-	mapOptions: function() {
-		return {center: central_campus, zoom: 15};
-	}
-});
-
 var central_campus = {lat: 42.447578, lng: -76.480256};
 var map;
 var events = [];
@@ -138,7 +132,10 @@ Template.home.helpers({
 			return false;
 		}
 		return true;
-    }
+	},
+	mapOptions: function() {
+		return {center: central_campus, zoom: 15};
+	}
 })
 
 Template.home.events({
