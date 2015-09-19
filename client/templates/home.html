@@ -21,10 +21,9 @@
                   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                     {{#each events}}
-                      
+
                       {{#if notAlreadyHappened this}}
                         <div class="panel panel-default {{mine _id}}" id="event-container">
-                      
                           <div class="panel-heading" role="tab" id="{{_id}}">
                             <h4 class="panel-title">
                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
