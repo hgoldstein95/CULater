@@ -2,31 +2,12 @@ var central_campus = {lat: 42.447578, lng: -76.480256};
 var map;
 var events = [];
 var markers = {};
-var info;
 
 Template.home.onCreated(function(){
+	// Set up Map
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
-
-		// Create generic InfoWindow
-		info = new google.maps.InfoWindow();
-
-		// Create Markers
-		for (var i = 0; i < events.length; i++){
-			(function (){
-				var marker = new google.maps.Marker({
-			  		position: {lat: events[i].latitude, lng: events[i].longitude},
-			  		map: map.instance,
-			  		title: events[i].name + " at " + events[i].startTime
-			  		//, icon: images/img.png
-			  	});
-			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
-			  	markers[events[i]._id] = marker;
-			}())
-		}
 
 		// Make the map reactive
 		Events.find().observe({
@@ -34,11 +15,12 @@ Template.home.onCreated(function(){
 				var marker = new google.maps.Marker({
 			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
 			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime
+			  		title: newEvent.name + " at " + newEvent.startTime,
+			  		icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
+			  		$("#link_"+newEvent._id).click();
+			  	});
 			  	markers[newEvent._id] = marker;
 			},
 			removed: function (oldEvent) {
@@ -56,21 +38,39 @@ Template.home.onCreated(function(){
 				var marker = new google.maps.Marker({
 			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
 			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime
+			  		title: newEvent.name + " at " + newEvent.startTime,
+			  		icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		info.setContent(marker.title);
-			  		info.open(map.instance, marker)});
+			  		$("#link_"+newEvent._id).click();
+			  	});
 			  	markers[newEvent._id] = marker;
 			}
 		});
 	});
+
+	// Function to update Marker colors
+	window.updateMarkers = function(obj) {
+		var openDivs = $(".collapse.in");
+
+		// Toggle icon of clicked event
+		if (markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png")
+			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+		else
+			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+
+		// Revert icon of other opened events
+		if (openDivs.length > 0)
+			markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+	}
 });
 
 Template.home.rendered = function() {
-	if(!Meteor.userId()) {
-		Router.go('/login');
-	}
+	setTimeout(function() {
+		if(!Meteor.user()) {
+			Router.go('/login');
+		}
+	}, 250);
 };
 
 function tConvert (time) {

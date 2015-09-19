@@ -19,6 +19,8 @@ Template.nav.helpers({
         return Meteor.user();
     },
     'netId': function() {
+      if(Meteor.user().services) {
         return Meteor.user().services.google.email.split("@")[0];
+      }
     }
 })
