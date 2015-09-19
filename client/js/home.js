@@ -14,15 +14,21 @@ Meteor.startup(function() {
 });
 
 Template.home.helpers({
-	tasks: [
-	   { text: "This is task 1" },
-	   { text: "This is task 2" },
-	   { text: "This is task 3" }
-	 ],
-	 users: [
-	   { user: "Helena" },
-	   { user: "Crafty Beaver" },
-	   { user: "Nom noms" }],
+   tasks: [
+     { text: "This is task 1" },
+     { text: "This is task 2" },
+     { text: "This is task 3" }
+   ],
+   event_info: {
+     time: '10:00 AM - 5:00PM',
+     place: 'Duffield Hall',
+     description: 'Come one, come all! Play Smash Bros.HULK SMASH! HULK SMASH! HULK SMASH!Lorem ipsum dolor sit amet, vocibus lucilius comprehensam duo cu, his modo enim graeci an. Nobis soleat mel ut. Cu quod veritus detracto eam, ea inimicus expetendis neglegentur has. Ne oratio principes mei, cu tollit reprimique usu.',
+     users: [
+       { user: "Helena" },
+       { user: "Crafty Beaver" },
+       { user: "Nom noms" }
+     ]
+   },
 	mapOptions: function() {
 		return {center: central_campus, zoom: 15};
 	}
@@ -31,7 +37,7 @@ Template.home.helpers({
 Template.home.onCreated(function(){
 	GoogleMaps.ready('map', function(map){
 		// Query Events
-		events = [{name: "Study group", lat: 42.4446657, lng: -76.4825664, time: "9:00PM", count: 4}, 
+		events = [{name: "Study group", lat: 42.4446657, lng: -76.4825664, time: "9:00PM", count: 4},
 				  {name: "Guest Lecture", lat: 42.4472546, lng: -76.4822503, time: "9:00PM", count: 147}];
 
 		// Create generic InfoWindow
