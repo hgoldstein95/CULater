@@ -4,12 +4,7 @@ var events = [];
 var markers = {};
 
 Template.home.onCreated(function(){
-<<<<<<< Updated upstream
 	// Set up Map
-=======
-
-
->>>>>>> Stashed changes
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
@@ -71,20 +66,14 @@ Template.home.onCreated(function(){
 });
 
 Template.home.rendered = function() {
-<<<<<<< Updated upstream
 	setTimeout(function() {
 		if(!Meteor.user()) {
 			Router.go('/login');
 		}
 	}, 250);
-=======
-	if(!Meteor.userId()) {
-		Router.go('/login');
-	}
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
->>>>>>> Stashed changes
 };
 
 function tConvert (time) {
