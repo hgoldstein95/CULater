@@ -14,6 +14,7 @@ Meteor.startup(function() {
 });
 
 Template.home.helpers({
+
    tasks: [
      { text: "This is task 1" },
      { text: "This is task 2" },
@@ -56,3 +57,11 @@ Template.home.onCreated(function(){
 		}
 	});
 });
+
+Template.home.helpers({
+
+	'events': function() {
+		console.log(Events.find({}));
+        return Events.find({});
+    }
+})
