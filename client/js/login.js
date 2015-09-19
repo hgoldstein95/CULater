@@ -6,7 +6,7 @@ Template.login.events({
             	//error handling
             	$('#login-failure').show();
         	} else {
-                Router.go('/');
+                
         	}
     	});
     }
