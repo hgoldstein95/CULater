@@ -4,6 +4,7 @@ var events = [];
 var markers = {};
 
 Template.home.onCreated(function(){
+	// Set up Map
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
@@ -18,16 +19,7 @@ Template.home.onCreated(function(){
 			  		icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		var div = $("#"+newEvent._id);
-			  		if (!div.hasClass("in")){
-			  			var openDivs = $(".collapse.in");
-			  			if (openDivs[0] != undefined){
-			  				markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-			  				openDivs.removeClass("in");
-			  			}
-			  			div.addClass("in");
-			  			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
-			  		}
+			  		$("#link_"+newEvent._id).click();
 			  	});
 			  	markers[newEvent._id] = marker;
 			},
@@ -50,21 +42,27 @@ Template.home.onCreated(function(){
 			  		icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
 			  	});
 			  	marker.addListener('click', function(){
-			  		var div = $("#"+newEvent._id);
-			  		if (!div.hasClass("in")){
-			  			var openDivs = $(".collapse.in");
-			  			if (openDivs[0] != undefined){
-			  				markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-			  				openDivs.removeClass("in");
-			  			}
-			  			div.addClass("in");
-			  			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
-			  		}
+			  		$("#link_"+newEvent._id).click();
 			  	});
 			  	markers[newEvent._id] = marker;
 			}
 		});
 	});
+
+	// Function to update Marker colors
+	window.updateMarkers = function(obj) {
+		var openDivs = $(".collapse.in");
+
+		// Toggle icon of clicked event
+		if (markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png")
+			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+		else
+			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+
+		// Revert icon of other opened events
+		if (openDivs.length > 0)
+			markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+	}
 });
 
 Template.home.rendered = function() {
