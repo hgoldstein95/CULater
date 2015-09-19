@@ -122,4 +122,4 @@ Template.eventForm.helpers({
   'locationNames': function() {
     return Session.get('names');
   }
-})
+});
