@@ -4,7 +4,12 @@ var events = [];
 var markers = {};
 
 Template.home.onCreated(function(){
+<<<<<<< Updated upstream
 	// Set up Map
+=======
+
+
+>>>>>>> Stashed changes
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
@@ -66,11 +71,20 @@ Template.home.onCreated(function(){
 });
 
 Template.home.rendered = function() {
+<<<<<<< Updated upstream
 	setTimeout(function() {
 		if(!Meteor.user()) {
 			Router.go('/login');
 		}
 	}, 250);
+=======
+	if(!Meteor.userId()) {
+		Router.go('/login');
+	}
+	$("[name='my-checkbox']").bootstrapSwitch();
+	$(".bootstrap-switch-handle-on").html("All");
+	$(".bootstrap-switch-handle-off").html("My");
+>>>>>>> Stashed changes
 };
 
 function tConvert (time) {
@@ -86,7 +100,7 @@ function tConvert (time) {
 }
 
 Template.home.helpers({
-	 'events': function() {
+	'events': function() {
         return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
     },
     'myEvent': function(eventId) {
@@ -162,6 +176,7 @@ Template.home.helpers({
 	}
 })
 
+
 Template.home.events({
 
 	'click #new-event': function(evt) {
@@ -188,16 +203,10 @@ Template.home.events({
 	'click a#delete-event': function(evt) {
     $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
     $('#dialogModal').modal();
-  },
-
-  	'click #my-events-button': function(evt) {
-  		$('.notMine#event-container').toggle();
-  		$('#all-events-button').toggle();
-  		$('#my-events-button').toggle();
   	},
-  	'click #all-events-button': function(evt) {
-  		$('.notMine#event-container').toggle();
-  		$('#all-events-button').toggle();
-  		$('#my-events-button').toggle();
+
+  	'click #label-switch': function(evt) {
+  	 	$('.notMine#event-container').toggle();
   	}
+
 });
