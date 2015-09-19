@@ -18,12 +18,12 @@ Meteor.startup(function(){
 	});
 
 	Accounts.validateNewUser(function (user) {
-    if(user.services.google.email.match(/cornell\.edu$/)) {
-        return true;
-    }
-});
+	    if(user.services.google.email.match(/cornell\.edu$/)) {
+	        return true;
+	    }
+	});
 });
 
-Meteor.methods({ 
-	eventsOnHooksInit : function(){} 
+Meteor.methods({
+	eventsOnHooksInit : function(){}
 });
