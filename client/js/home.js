@@ -1,18 +1,3 @@
-
-// Important Variables
-var central_campus = {lat: 42.447578, lng: -76.480256};
-var map;
-var events = [];
-var markers = [];
-var info;
-
-Meteor.startup(function() {
-	GoogleMaps.load();
-
-	Meteor.subscribe('users');
-	Meteor.subscribe('events');
-});
-
 Template.home.helpers({
    tasks: [
      { text: "This is task 1" },
@@ -30,6 +15,11 @@ Template.home.helpers({
 	}
 });
 
+var central_campus = {lat: 42.447578, lng: -76.480256};
+var map;
+var events = [];
+var markers = [];
+var info;
 Template.home.onCreated(function(){
 	GoogleMaps.ready('map', function(map){
 		// Query Events
