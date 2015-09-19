@@ -7,13 +7,11 @@ Template.home.helpers({
 var central_campus = {lat: 42.447578, lng: -76.480256};
 var map;
 var events = [];
-var markers = [];
 var info;
+
 Template.home.onCreated(function(){
 	GoogleMaps.ready('map', function(map){
 		// Query Events
-		//events = [{name: "Study group", lat: 42.4446657, lng: -76.4825664, time: "9:00PM", count: 4},
-		//		  {name: "Guest Lecture", lat: 42.4472546, lng: -76.4822503, time: "9:00PM", count: 147}];
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 
 		// Create generic InfoWindow
@@ -31,9 +29,29 @@ Template.home.onCreated(function(){
 			  	marker.addListener('click', function(){
 			  		info.setContent(marker.title);
 			  		info.open(map.instance, marker)});
-				markers.push(marker);
 			}())
 		}
+
+		// Make the map reactive
+		Events.find().observe({
+			added: function (newEvent) {
+				var marker = new google.maps.Marker({
+			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
+			  		map: map.instance,
+			  		title: newEvent.name + " at " + newEvent.startTime
+			  		//, icon: images/img.png
+			  	});
+			  	marker.addListener('click', function(){
+			  		info.setContent(marker.title);
+			  		info.open(map.instance, marker)});
+			},
+			removed: function (oldEvent) {
+
+			},
+			changed: function (newEvent, oldEvent) {
+
+			}
+		});
 	});
 });
 
