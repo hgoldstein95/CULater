@@ -5,7 +5,7 @@ Template.nav.events({
         	if(err) {
             	$('#login-failure').show();
         	} else {
-
+                Router.go('/');
         	}
     	});
     },

@@ -14,7 +14,7 @@
   height: 600px;
   width: 100%;
   border: 1px solid black;
-  background: gray;
+  margin-bottom: 10px;
 }
 
 .intro-header {
@@ -38,4 +38,11 @@
 
 #info-data {
   color: #54545c;
+}
+
+#delete-event, #edit-event {
+  font-size: 0.7em;
+  color: red;
+  margin-left: 20px;
+  float: right;
 }
