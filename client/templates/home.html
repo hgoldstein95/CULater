@@ -16,14 +16,16 @@
 
                 <div class="col-lg-4 col-sm-12">
                 <div id='new-event' class="btn btn-default" data-toggle="modal" data-target="#form-modal">Add Event +</div>
+                <div id='my-events-button' class="btn btn-default">My Events</div>
+                <div id='all-events-button' class="btn btn-default" style="display:none;">All Events</div>
                   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                     {{#each events}}
                       
                       {{#if notAlreadyHappened this}}
-                        <div class="panel panel-default">
+                        <div class="panel panel-default {{mine _id}}" id="event-container">
                       
-                          <div class="panel-heading" role="tab" id="headingOne">
+                          <div class="panel-heading" role="tab" id="{{_id}}">
                             <h4 class="panel-title">
                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
                                 <span class="eventTitle">{{name}}</span>

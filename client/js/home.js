@@ -50,10 +50,16 @@ function tConvert (time) {
 
 Template.home.helpers({
 	 'events': function() {
-        return Events.find({});
+        return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
     },
     'myEvent': function(eventId) {
     	return Meteor.userId() == Events.findOne({_id: eventId}).adminId;
+    },
+    'mine': function(eventId) {
+    	if( Meteor.userId() == Events.findOne({_id:eventId}).adminId){
+    		return "mine";
+    	}
+    	return "notMine";
     },
     'getDate': function(date) {
     	date = date.split('-');
@@ -143,4 +149,15 @@ Template.home.events({
     $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
     $('#dialogModal').modal();
   },
+
+  	'click #my-events-button': function(evt) {
+  		$('.notMine#event-container').toggle();
+  		$('#all-events-button').toggle();
+  		$('#my-events-button').toggle();
+  	},
+  	'click #all-events-button': function(evt) {
+  		$('.notMine#event-container').toggle();
+  		$('#all-events-button').toggle();
+  		$('#my-events-button').toggle();
+  	}
 });
