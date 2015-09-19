@@ -52,6 +52,12 @@
                               <p>End Time: {{getTime endTime}}</p>
                               <p>Description: {{description}}</p>
                               <p>Location: {{location}}</p>
+                              <p>Number Attending: {{numAttending attendees}}</p>
+                              {{#if inEvent _id}}
+                                <button class='btn btn-danger' id='leave-button'>Leave</button>
+                              {{else}}
+                                <button class="btn btn-primary" id='join-button'>Join</button>
+                              {{/if}}
                               {{#if myEvent _id}}
                                 <a id="edit-event" data-toggle="modal" data-target="#form-modal" data-eventid="{{_id}}">Edit</a>
                                 <a id="delete-event" data-eventid="{{_id}}">Delete</a>
