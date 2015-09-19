@@ -21,7 +21,6 @@ Meteor.startup(function(){
     if(user.services.google.email.match(/cornell\.edu$/)) {
         return true;
     }
-    throw new Meteor.Error(403, "You must sign in using a cornell.edu account");
 });
 });
 

@@ -1,5 +1,40 @@
 <template name='home'>
-  <h1>Hello <small>World</small></h1>
-  <a id="login" href="">Login</a>
-  <a id="logout" href="">Logout</a>
+  {{> nav}}
+    <!-- Page Content -->
+
+	<a  name="services"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-sm-12">
+                  <div id="map"></div>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <span class="badge"><a href="">3 mi</a></span>
+                      CHEM 2090 Study Group
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge"><a href="">1 mi</a></span>
+                      Smash Party
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge"><a href="">0.5 mi</a></span>
+                      Big Red Hacks
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge"><a href="">4 mi</a></span>
+                      A Cappella Tryouts
+                    </li>
+                  </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
 </template>

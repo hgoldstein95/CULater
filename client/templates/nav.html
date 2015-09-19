@@ -1,0 +1,44 @@
+<template name='nav'>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+      <div class="container topnav">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand topnav" href="#">CU Later</a>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    {{#if user}}
+                      <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">{{netId}} <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a id="logout" href="/login">Logout</a></li>
+                      </ul>
+                    {{else}}
+                      <a id="login" href="">Login</a>
+                    {{/if}}
+                  </li>
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+
+          <div id="login-failure" class="bs-component" style="display:none;">
+        <div class="alert alert-dismissable alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <p>Please use a valid email address in the form of [netid]@cornell.edu!.</p>
+        </div>
+      </div>
+
+      </div>
+      <!-- /.container -->
+
+  </nav>
+</template>

@@ -10,3 +10,5 @@ iron:router
 accounts-base
 accounts-google
 accounts-oauth
+fourseven:scss
+twbs:bootstrap
