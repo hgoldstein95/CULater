@@ -68,9 +68,11 @@ Template.home.onCreated(function(){
 });
 
 Template.home.rendered = function() {
-	if(!Meteor.userId()) {
-		Router.go('/login');
-	}
+	setTimeout(function() {
+		if(!Meteor.user()) {
+			Router.go('/login');
+		}
+	}, 250);
 };
 
 function tConvert (time) {
