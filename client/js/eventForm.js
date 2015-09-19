@@ -72,6 +72,19 @@ Template.eventForm.events({
   	var startTime = evt.target.eventStartTime.value;
   	var endTime = evt.target.eventEndTime.value;
   	var attendees = [];
+
+    // Trashy way to get lat/lon
+    var latitude = undefined;
+    var longitude = undefined;
+    var i = 0;
+    while (latitude == undefined && i < buildings.length) {
+      if (buildings[i].Name == location) {
+        latitude = buildings[i].Latitude;
+        longitude = buildings[i].Longitude;
+      }
+      i++;
+    }
+
     Events.update({
             _id: eventId
         }, {
@@ -80,6 +93,8 @@ Template.eventForm.events({
 		    	name: name,
 		    	description: description,
 		    	location: location,
+          latitude: latitude,
+          longitude: longitude,
 		    	date: date,
 		    	startTime: startTime,
 		    	endTime: endTime,
