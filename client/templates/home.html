@@ -6,6 +6,7 @@
     <div class="content-section-a">
 
         <div class="container">
+            <div id='new-event' class="btn btn-default pull-right" data-toggle="modal" data-target="#form-modal">Add Event +</div>
             <div class="row">
                 <div class="col-lg-8 col-sm-12">
                   <div id="map">
@@ -16,19 +17,19 @@
                   <ul class="list-group">
                     <li class="list-group-item">
                       <span class="badge">3 mi</span>
-                      <a href="" data-toggle="modal" data-target="#myModal">CHEM 2090 Study Group</a>
+                      <a href="">CHEM 2090 Study Group</a>
                     </li>
                     <li class="list-group-item">
                       <span class="badge">1 mi</span>
-                      <a href="" data-toggle="modal" data-target="#myModal">Smash Party</a>
+                      <a href="">Smash Party</a>
                     </li>
                     <li class="list-group-item">
                       <span class="badge">0.5 mi</span>
-                      <a href="" data-toggle="modal" data-target="#myModal">Big Red Hacks</a>
+                      <a href="">Big Red Hacks</a>
                     </li>
                     <li class="list-group-item">
                       <span class="badge">4 mi</span>
-                      <a href="" data-toggle="modal" data-target="#myModal">A Cappella Tryouts</a>
+                      <a href="">A Cappella Tryouts</a>
                     </li>
                   </ul>
                 </div>
@@ -38,36 +39,5 @@
         <!-- /.container -->
     </div>
     <!-- /.content-section-a -->
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Smash Party</h4>
-          </div>
-          <div class="modal-body">
-          {{#with event_info}}
-            <div class="info">
-              <div id="time"><span id="info-name"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Time: </span><span id="info-data">{{time}}</span></div>
-              <div id="place"><span id="info-name"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Place: </span><span id="info-data">{{place}}</span></div>
-              <div id="info-description"><span id="info-name">Description:</span><br>
-              <span id="info-data">
-                {{description}}
-              </span></div>
-              <br>
-              {{users_count}} other people are going!
-            </div>
-          {{/with}}
-          </div>
-          <div class="modal-footer">
-            JOIN?
-            <button type="button" class="btn btn-primary">YES</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
+    {{> eventForm}}
 </template>
