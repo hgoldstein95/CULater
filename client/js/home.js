@@ -51,3 +51,24 @@ Template.home.helpers({
     	return Meteor.userId() == Events.findOne({_id: eventId}).adminId;
     }
 })
+
+Template.home.events({
+
+	'click a#edit-event': function(evt) {
+		var eventId = $(evt.target).data("eventid");
+		if(Meteor.userId() == Events.findOne({_id: eventId}).adminId) {
+	    	Events.remove({
+	    		_id: eventId
+	    	});
+    	}
+    },
+
+	'click a#delete-event': function(evt) {
+		var eventId = $(evt.target).data("eventid");
+		if(Meteor.userId() == Events.findOne({_id: eventId}).adminId) {
+	    	Events.remove({
+	    		_id: eventId
+	    	});
+    	}
+    }
+})

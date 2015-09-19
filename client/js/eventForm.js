@@ -14,5 +14,7 @@ Template.eventForm.events({
     	time: time,
     	attendees: attendees
     });
+    $("#modal-close").click();
+    $("form")[0].reset();
   }
 });

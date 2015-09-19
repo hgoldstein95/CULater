@@ -5,15 +5,9 @@ Events.allow({
 		return true;
 	},
 	'remove': function(userId, doc){
-		var userId = Meteor.userId();
-		if(userId && Events.findOne({_id: eventId}).adminId == userId){
-			return true;
-		}
+		return true;
 	},
 	'update': function(userId, doc){
-		var userId = Meteor.userId();
-		if(userId && Events.findOne({_id: eventId}).adminId == userId){
-			return true;
-		}
+		return true;
 	}
 })
