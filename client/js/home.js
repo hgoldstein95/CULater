@@ -1,6 +1,7 @@
 var central_campus = {lat: 42.447578, lng: -76.480256};
 var map;
 var events = [];
+var markers = {};
 var info;
 
 Template.home.onCreated(function(){
@@ -23,6 +24,7 @@ Template.home.onCreated(function(){
 			  	marker.addListener('click', function(){
 			  		info.setContent(marker.title);
 			  		info.open(map.instance, marker)});
+			  	markers[events[i]._id] = marker;
 			}())
 		}
 
@@ -33,17 +35,33 @@ Template.home.onCreated(function(){
 			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
 			  		map: map.instance,
 			  		title: newEvent.name + " at " + newEvent.startTime
-			  		//, icon: images/img.png
 			  	});
 			  	marker.addListener('click', function(){
 			  		info.setContent(marker.title);
 			  		info.open(map.instance, marker)});
+			  	markers[newEvent._id] = marker;
 			},
 			removed: function (oldEvent) {
-
+				markers[oldEvent._id].setMap(null);
+				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
+				delete markers[oldEvent._id];
 			},
 			changed: function (newEvent, oldEvent) {
+				// Remove old Marker
+				markers[oldEvent._id].setMap(null);
+				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
+				delete markers[oldEvent._id];
 
+				// Create new Marker
+				var marker = new google.maps.Marker({
+			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
+			  		map: map.instance,
+			  		title: newEvent.name + " at " + newEvent.startTime
+			  	});
+			  	marker.addListener('click', function(){
+			  		info.setContent(marker.title);
+			  		info.open(map.instance, marker)});
+			  	markers[newEvent._id] = marker;
 			}
 		});
 	});
