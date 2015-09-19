@@ -1,10 +1,4 @@
 Template.home.helpers({
-   event_info: {
-     time: '10:00 AM - 5:00PM',
-     place: 'Duffield Hall',
-     description: 'Come one, come all! Play Smash Bros.HULK SMASH! HULK SMASH! HULK SMASH!Lorem ipsum dolor sit amet, vocibus lucilius comprehensam duo cu, his modo enim graeci an. Nobis soleat mel ut. Cu quod veritus detracto eam, ea inimicus expetendis neglegentur has. Ne oratio principes mei, cu tollit reprimique usu.',
-     users_count: 3
-   },
 	mapOptions: function() {
 		return {center: central_campus, zoom: 15};
 	}
@@ -43,8 +37,7 @@ Template.home.onCreated(function(){
 });
 
 Template.home.helpers({
-
-	'events': function() {
+	 'events': function() {
         return Events.find({});
     },
     'myEvent': function(eventId) {
@@ -53,22 +46,16 @@ Template.home.helpers({
 })
 
 Template.home.events({
-
 	'click a#edit-event': function(evt) {
 		var eventId = $(evt.target).data("eventid");
 		if(Meteor.userId() == Events.findOne({_id: eventId}).adminId) {
-	    	Events.remove({
-	    		_id: eventId
-	    	});
-    	}
-    },
-
+    	Events.remove({
+    		_id: eventId
+    	});
+  	}
+  },
 	'click a#delete-event': function(evt) {
-		var eventId = $(evt.target).data("eventid");
-		if(Meteor.userId() == Events.findOne({_id: eventId}).adminId) {
-	    	Events.remove({
-	    		_id: eventId
-	    	});
-    	}
-    }
-})
+    $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
+    $('#dialogModal').modal();
+  }
+});
