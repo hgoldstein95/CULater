@@ -38,12 +38,13 @@
                           </div>
                           <div id="{{_id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="#{{_id}}">
                             <div class="panel-body">
-                              <p>Date: {{getDate date}}</p>
-                              <p>Start Time: {{getTime startTime}}</p>
-                              <p>End Time: {{getTime endTime}}</p>
-                              <p>Description: {{description}}</p>
-                              <p>Location: {{location}}</p>
-                              <p>Number Attending: {{numAttending attendees}}</p>
+                              <p>{{getDate date}}</p>
+                              <p>{{getTime startTime}} - {{getTime endTime}}</p>
+                              <p>{{location}}</p>
+                              <br>
+                              <p>{{description}}</p>
+                              <br>
+                              <p>{{numAttending attendees}} attending.</p>
                               {{#if inEvent _id}}
                                 <button class='btn btn-danger' id='leave-button'>Leave</button>
                               {{else}}
