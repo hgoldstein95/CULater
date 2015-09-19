@@ -50,23 +50,23 @@
             <h4 class="modal-title" id="myModalLabel">Smash Party</h4>
           </div>
           <div class="modal-body">
-
+          {{#with event_info}}
             <div class="info">
-              <div id="time"><span id="info-name"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Time: </span><span id="info-data">10:00 AM - 5:00PM</span></div>
-              <div id="place"><span id="info-name"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Place: </span><span id="info-data">Duffield Hall</span></div>
+              <div id="time"><span id="info-name"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Time: </span><span id="info-data">{{time}}</span></div>
+              <div id="place"><span id="info-name"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Place: </span><span id="info-data">{{place}}</span></div>
               <div id="info-description"><span id="info-name">Description</span><br>
               <span id="info-data">
-              Come one, come all! Play Smash Bros.<br>
-              HULK SMASH! HULK SMASH! HULK SMASH! <br>
-              Lorem ipsum dolor sit amet, vocibus lucilius comprehensam duo cu, his modo enim graeci an. Nobis soleat mel ut. Cu quod veritus detracto eam, ea inimicus expetendis neglegentur has. Ne oratio principes mei, cu tollit reprimique usu.<br><br></span></div>
+                {{description}}
+              </span></div>
 
               Who else is going?
               <ul>
                 {{#each users}}
-                <li>{{this.user}}</li>
+                <li>{{user}}</li>
                 {{/each}}
             </ul>
             </div>
+          {{/with}}
           </div>
 
           <div class="modal-footer">
