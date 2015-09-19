@@ -1,0 +1,30 @@
+<template name='eventForm'>
+  <!-- Modal -->
+  <div class="modal fade" id="form-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">New Event</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="eventName">Email address</label>
+              <input type="text" class="form-control" id="eventName" placeholder="E.g. Big Red Hacks">
+            </div>
+            <div class="form-group">
+              <label for="eventLocation">Password</label>
+              <input type="text" class="form-control" id="eventLocation" placeholder="E.g. Physical Science Building">
+            </div>
+            <div class="form-group">
+              <label for="eventTime">File input</label>
+              <input type="datetime-local" id="eventTime">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
