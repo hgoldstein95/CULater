@@ -203,27 +203,21 @@ Template.home.events({
 
   	'click #label-switch': function(evt) {
   	 	$('.notMine#event-container').toggle();
-  	}
-
-  	'click #all-events-button': function(evt) {
-  		$('.notMine#event-container').toggle();
-  		$('#all-events-button').toggle();
-  		$('#my-events-button').toggle();
   	},
-		'click #join-button': function(evt) {
-			evt.preventDefault();
-			var eventId = $(evt.target).parent().parent().attr('id');
-			var attendees = Events.findOne({_id: eventId}).attendees;
-			if(!_.contains(attendees, Meteor.userId())) {
-				attendees.push(Meteor.userId());
-				Events.update({'_id': eventId}, {$set: {'attendees': attendees}});
-			}
-		},
-		'click #leave-button': function(evt) {
-			evt.preventDefault();
-			var eventId = $(evt.target).parent().parent().attr('id');
-			var attendees = Events.findOne({_id: eventId}).attendees;
-			attendees.splice(attendees.indexOf(Meteor.userId()));
+	'click #join-button': function(evt) {
+		evt.preventDefault();
+		var eventId = $(evt.target).parent().parent().attr('id');
+		var attendees = Events.findOne({_id: eventId}).attendees;
+		if(!_.contains(attendees, Meteor.userId())) {
+			attendees.push(Meteor.userId());
 			Events.update({'_id': eventId}, {$set: {'attendees': attendees}});
 		}
+	},
+	'click #leave-button': function(evt) {
+		evt.preventDefault();
+		var eventId = $(evt.target).parent().parent().attr('id');
+		var attendees = Events.findOne({_id: eventId}).attendees;
+		attendees.splice(attendees.indexOf(Meteor.userId()));
+		Events.update({'_id': eventId}, {$set: {'attendees': attendees}});
+	}
 });
