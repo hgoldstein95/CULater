@@ -12,8 +12,9 @@ var info;
 Template.home.onCreated(function(){
 	GoogleMaps.ready('map', function(map){
 		// Query Events
-		events = [{name: "Study group", lat: 42.4446657, lng: -76.4825664, time: "9:00PM", count: 4},
-				  {name: "Guest Lecture", lat: 42.4472546, lng: -76.4822503, time: "9:00PM", count: 147}];
+		//events = [{name: "Study group", lat: 42.4446657, lng: -76.4825664, time: "9:00PM", count: 4},
+		//		  {name: "Guest Lecture", lat: 42.4472546, lng: -76.4822503, time: "9:00PM", count: 147}];
+		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 
 		// Create generic InfoWindow
 		info = new google.maps.InfoWindow();
@@ -22,9 +23,9 @@ Template.home.onCreated(function(){
 		for (var i = 0; i < events.length; i++){
 			(function (){
 				var marker = new google.maps.Marker({
-			  		position: {lat: events[i].lat, lng: events[i].lng},
+			  		position: {lat: events[i].latitude, lng: events[i].longitude},
 			  		map: map.instance,
-			  		title: events[i].name + " at " + events[i].time
+			  		title: events[i].name + " at " + events[i].startTime
 			  		//, icon: images/img.png
 			  	});
 			  	marker.addListener('click', function(){

@@ -1,7 +1,9 @@
+var buildings = [];
+
 Template.eventForm.rendered = function() {
   HTTP.get(Meteor.absoluteUrl("assets/buildings.json"), function(err,result) {
       var input = document.getElementById("eventLocation");
-      var buildings = result.data;
+      buildings = result.data;
       new Awesomplete(input, {
         list: _.pluck(buildings, 'Name')
       });
@@ -31,11 +33,26 @@ Template.eventForm.events({
   		$("#error-messages").show();
   		return;
   	}
+
+    // Trashy way to get lat/lon
+    var latitude = undefined;
+    var longitude = undefined;
+    var i = 0;
+    while (latitude == undefined && i < buildings.length) {
+      if (buildings[i].Name == location) {
+        latitude = buildings[i].Latitude;
+        longitude = buildings[i].Longitude;
+      }
+      i++;
+    }
+
     Events.insert({
     	adminId: Meteor.userId(),
     	name: name,
     	description: description,
     	location: location,
+      latitude: latitude,
+      longitude: longitude,
     	date: date,
     	startTime: startTime,
     	endTime: endTime,
