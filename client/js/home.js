@@ -139,14 +139,8 @@ Template.home.events({
     	}
     },
 
-		if(Meteor.userId() == Events.findOne({_id: eventId}).adminId) {
-    	Events.remove({
-    		_id: eventId
-    	});
-  	}
-  },
 	'click a#delete-event': function(evt) {
     $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
     $('#dialogModal').modal();
-  }
+  },
 });
