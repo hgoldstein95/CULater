@@ -41,5 +41,42 @@
     </div>
     </div>
     <!-- /.content-section-a -->
-    {{> modal}}
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Smash Party</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="info">
+              <div id="time"><span id="info-name"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Time: </span><span id="info-data">10:00 AM - 5:00PM</span></div>
+              <div id="place"><span id="info-name"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Place: </span><span id="info-data">Duffield Hall</span></div>
+              <div id="info-description"><span id="info-name">Description</span><br>
+              <span id="info-data">
+              Come one, come all! Play Smash Bros.<br>
+              HULK SMASH! HULK SMASH! HULK SMASH! <br>
+              Lorem ipsum dolor sit amet, vocibus lucilius comprehensam duo cu, his modo enim graeci an. Nobis soleat mel ut. Cu quod veritus detracto eam, ea inimicus expetendis neglegentur has. Ne oratio principes mei, cu tollit reprimique usu.<br><br></span></div>
+
+              Who else is going?
+              <ul>
+                {{#each users}}
+                <li>{{this.user}}</li>
+                {{/each}}
+            </ul>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            JOIN?
+            <button type="button" class="btn btn-primary">YES</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
 </template>
