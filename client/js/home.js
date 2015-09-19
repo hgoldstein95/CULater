@@ -1,10 +1,4 @@
 Template.home.helpers({
-
-   tasks: [
-     { text: "This is task 1" },
-     { text: "This is task 2" },
-     { text: "This is task 3" }
-   ],
    event_info: {
      time: '10:00 AM - 5:00PM',
      place: 'Duffield Hall',

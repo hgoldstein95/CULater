@@ -5,19 +5,19 @@
 	<a  name="services"></a>
     <div class="content-section-a">
         <div class="container">
-            <div id='new-event' class="btn btn-default pull-right" data-toggle="modal" data-target="#form-modal">Add Event +</div>
             <div class="row">
-                
+
                 <div class="col-lg-8 col-sm-12">
                   <div id="map">
                   	{{> googleMap name="map" options=mapOptions}}
                   </div>
                 </div>
 
-                
+
                 <div class="col-lg-4 col-sm-12">
+                <div id='new-event' class="btn btn-default" data-toggle="modal" data-target="#form-modal">Add Event +</div>
                   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    
+
                     {{#each events}}
                       <div class="panel panel-default">
                       <div class="panel-heading" role="tab" id="headingOne">
@@ -41,7 +41,7 @@
                     </div>
                     {{/each}}
 
-                    
+
 
 
                   </div>
