@@ -1,8 +1,12 @@
 .content-section-a {
   margin-top: 40px;
   padding-top: 80px;
-  .badge a {
-    color: white;
+  .list-group-item a {
+    color: black;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
   }
 }
 
