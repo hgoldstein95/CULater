@@ -1,7 +1,7 @@
 .content-section-a {
   margin-top: 20px;
   padding-bottom: 100px;
-  padding-top: 80px;
+  padding-top: 20px;
   .list-group-item a {
     color: black;
     &:hover,
@@ -55,4 +55,11 @@
 
 .make-switch {
   float: right;
+}
+
+
+.slogan {
+  font-size: 30px;
+  padding: 20px 25px;
+  font-family: 'Sansita One', cursive;
 }
