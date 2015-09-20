@@ -2,11 +2,9 @@ var buildings = [];
 
 Template.eventForm.rendered = function() {
   HTTP.get(Meteor.absoluteUrl("assets/buildings.json"), function(err,result) {
-      var input = document.getElementById("eventLocation");
       buildings = result.data;
-      new Awesomplete(input, {
-        list: _.pluck(buildings, 'Name')
-      });
+      var names = _.pluck(buildings, 'Name');
+      Session.set('names', names);
   });
 };
 
@@ -112,13 +110,16 @@ Template.eventForm.helpers({
 
 		if(dd<10) {
 		    dd='0'+dd
-		} 
+		}
 
 		if(mm<10) {
 		    mm='0'+mm
-		} 
+		}
 
 		t = yyyy + "-" + mm+'-'+dd;
 		return t;
-	}
-})
+	},
+  'locationNames': function() {
+    return Session.get('names');
+  }
+});
