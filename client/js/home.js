@@ -272,7 +272,6 @@ Template.home.helpers({
     	}
     },
     datesPresent: function() {
-    	console.log("hello");
     	var date1 = $("#date1").value;
 		var date2 = $("#date2").value;
 		if(date1 && date2){
@@ -381,7 +380,13 @@ Template.home.events({
 			eventsList = Events.find({category:category},{sort: {"date": 1, "startTime": 1}});
 		}
 		if(attending && category){
-			eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
+			var myEvents = Events.find({category:category},{sort: {"date": 1, "startTime": 1}}).fetch();
+			for(var i = 0; i < myEvents.length; i++){
+				if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
+					$("#event-container_" + myEvents[i]._id).hide();
+				}
+			}
+			//eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(large && category){
 			eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}});
@@ -390,7 +395,15 @@ Template.home.events({
 			eventsList = Events.find( { $and: [ {adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(attending && !category){
-			eventsList = Events.find( { $and: [ {attendees: Meteor.user()} ] },{sort: {"date": 1, "startTime": 1}});
+			var myEvents = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+			for(var i = 0; i < myEvents.length; i++){
+				if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
+					$("#event-container_" + myEvents[i]._id).hide();
+
+				}
+			}
+
+			//eventsList = Events.find( { $and: [ {attendees: Meteor.user()} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(large && !category){
 			eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} }] },{sort: {"date": 1, "startTime": 1}});
@@ -416,7 +429,13 @@ Template.home.events({
 				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category:category}] } ,{sort: {"date": 1, "startTime": 1}})
 			}
 			if(attending && category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
+				var myEvents = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category:category} ] },{sort: {"date": 1, "startTime": 1}}).fetch();
+				for(var i = 0; i < myEvents.length; i++){
+					if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
+						$("#event-container_" + myEvents[i]._id).hide();
+					}
+				}
+				//eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(large && category){
 				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
@@ -465,8 +484,10 @@ Template.home.events({
 				$("#event-container_" + eventId).hide();
 			}
 			else{
-				var eventId = allEvents[i]._id;
-				$("#event-container_" + eventId).show();
+				if(!attending){
+					var eventId = allEvents[i]._id;
+					$("#event-container_" + eventId).show();
+				}
 			}
 		}
 	}
