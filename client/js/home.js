@@ -15,8 +15,8 @@ window.addMarker = function (newEvent, open) {
   		$("#link_"+newEvent._id).click();
   	});
   	window.markers[newEvent._id] = marker;
-	window.toggleTime();
-	events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	// window.toggleTime();	ofp3
+	window.filterStuff(undefined);
 }
 
 window.removeMarker = function (eventId) {
@@ -24,7 +24,6 @@ window.removeMarker = function (eventId) {
 		window.markers[eventId].setMap(null);
 		google.maps.event.clearInstanceListeners(window.markers[eventId]);
 		delete window.markers[eventId];
-		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 	}
 }
 
@@ -37,6 +36,7 @@ window.toggleTime = function() {
 		$("#slider-val").html("");
 		
 		// Show all events
+		// filterStuff(undefined); ofp3
 		for (var i = 0; i < events.length; i++) {
 			if(window.markers[events[i]._id]){
 				window.markers[events[i]._id].setVisible(true);
@@ -48,7 +48,9 @@ window.toggleTime = function() {
 
 function filterMarkers(val) {
 	// Filter out Markers
-	events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	// events = Session.get("events");
+	// filterStuff(undefined); ofp3
+	var new_arr = [];
 	for (var i = 0; i < events.length; i++) {
 		// Check that the date is within 2 hours of the slider time
 		var start_time = new Date();
@@ -66,23 +68,27 @@ function filterMarkers(val) {
 		end_time.setSeconds("0");
 		end_time.setMinutes("0");
 		end_time.setHours(end_time.getHours() + parseInt(val) + 2);
+
 		if(window.markers[events[i]._id]){
 			if (event_time >= start_time && event_time < end_time){
 				window.markers[events[i]._id].setVisible(true);
-				$("#event-container_"+events[i]._id).css("display", "block");
+				new_arr[i] = events[i];
+				// $("#event-container_"+events[i]._id).css("display", "block");
 			}else{
 				window.markers[events[i]._id].setVisible(false);
-				$("#event-container_"+events[i]._id).css("display", "none");
+				// $("#event-container_"+events[i]._id).css("display", "none");
 			}
 		}
 	}
+	events = new_arr;
+	Session.set("events", events);
 }
 
 Template.home.onCreated(function(){
 	// Set up Map
 	GoogleMaps.ready('map', function(map){
 		// Query Events
-		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+		events = Session.get("events");
 		window.map = map;
 
 		// Create initial markers
@@ -150,8 +156,7 @@ function tConvert (time) {
 
 Template.home.helpers({
 	'events': function() {
-        //return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
-        return Session.get("events");
+		return Session.get("events");
     },
     'myEvent': function(eventId) {
     	if(Events.findOne({_id:eventId})){
@@ -245,7 +250,8 @@ Template.home.helpers({
 				window.markers[eventId].setMap(null);
 				google.maps.event.clearInstanceListeners(window.markers[eventId]);
 				delete window.markers[eventId];
-				window.toggleTime();
+				// window.toggleTime();
+				window.filterStuff(undefined);
 			}
 			
 			return false;
@@ -285,6 +291,128 @@ Template.home.helpers({
 	}
 })
 
+function hideAllMarkers() {
+	var temp = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	for (var i = 0; i < temp.length; i++) {
+		if (markers[temp[i]._id])
+			markers[temp[i]._id].setVisible(false);
+	}
+}
+
+window.filterStuff = function(evt) {
+	var all = document.getElementById("all").checked;
+	var attending = document.getElementById("attending").checked;
+	var large = document.getElementById("large").checked;
+	var my = document.getElementById("my").checked;
+	var date1 = document.getElementById("date1").value;
+	var date2 = document.getElementById("date2").value;
+	var club = document.getElementById("club").checked;
+	var study = document.getElementById("study").checked;
+	var office = document.getElementById("office").checked;
+	var party = document.getElementById("party").checked;
+	var other = document.getElementById("other").checked;
+	var category;
+
+	if(club){
+		category = "Club Meeting";
+	}
+	if(study){
+		category = "Study Group";
+	}
+	if(office){
+		category = "Office Hours";
+	}
+	if(party){
+		category = "Party";
+	}
+	if(other){
+		category = "Other";
+	}
+
+	if(document.getElementById("time1")){
+		var time1 = document.getElementById("time1").value;
+		var time2 = document.getElementById("time2").value;
+	}
+	var eventsList = Events.find({},{sort: {"date": 1, "startTime": 1}});
+	if(category){
+		eventsList = Events.find({category:category},{sort: {"date": 1, "startTime": 1}});
+	}
+	if(attending && category){
+		eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(large && category){
+		eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(my && category) {
+		eventsList = Events.find( { $and: [ {adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(attending && !category){
+		eventsList = Events.find( { $and: [ {attendees: Meteor.user()} ] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(large && !category){
+		eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} }] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(my && !category) {
+		eventsList = Events.find( { $and: [ {adminId: Meteor.userId()} ] },{sort: {"date": 1, "startTime": 1}});
+	}
+	if(date1 && date2){
+		$("#times-between").show();
+		var newTime1 = time1;
+		var newTime2 = time2;
+		if(!time1 || !time2){
+			newTime1 = "00:00";
+			newTime2 = "23:59";
+		}
+		var minutes1 = (parseInt(newTime1.split(":")[1]) - 1) + "";
+		var minutes2 = (parseInt(newTime2.split(":")[1]) + 1) + "";
+		var eventDate1 = new Date(date1.split("-")[0],date1.split("-")[1]-1,date1.split("-")[2], newTime1.split(":")[0], minutes1, 0);
+		var eventDate2 = new Date(date2.split("-")[0],date2.split("-")[1]-1,date2.split("-")[2], newTime2.split(":")[0], minutes2, 0);
+
+		eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } }] } ,{sort: {"date": 1, "startTime": 1}})
+		if(category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category:category}] } ,{sort: {"date": 1, "startTime": 1}})
+		}
+		if(attending && category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
+		}
+		if(large && category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
+		}
+		if(my && category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}})
+		}
+		if(attending && !category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
+		}
+		if(large && !category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} } ] },{sort: {"date": 1, "startTime": 1}})
+		}
+		if(my && !category){
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()} ] },{sort: {"date": 1, "startTime": 1}})
+		}
+	}
+	else{
+		$("#times-between").hide();
+	}
+	eventsList=eventsList.fetch();
+	Session.set("events",eventsList);
+	
+	// Visible events list may have changed so update variable
+	events = Session.get("events");
+	hideAllMarkers();
+	toggleTime();
+	// // Hide all the markers
+	// for (var m in window.markers)
+	// 	window.markers[m].setVisible(false);
+	// // If interval-view is on, filterMarkers on new events list
+	// if ($("#time_checkbox")[0].checked){
+	// 	filterMarkers($("#time_slider")[0].value);
+	// } else {
+	// 	// Otherwise, reappear only the ones on the event list
+	// 	for (var i = 0; i < events.length; i++)
+	// 		window.markers[events[i]._id].setVisible(true);
+	// }
+}
 
 Template.home.events({
 
@@ -340,116 +468,6 @@ Template.home.events({
     	$('.category-checkbox').not($(evt.target)).prop('checked', false);  
 	},
 	'change .filter-field': function(evt) {
-		var all = document.getElementById("all").checked;
-		var attending = document.getElementById("attending").checked;
-		var large = document.getElementById("large").checked;
-		var my = document.getElementById("my").checked;
-		var date1 = document.getElementById("date1").value;
-		var date2 = document.getElementById("date2").value;
-		var club = document.getElementById("club").checked;
-		var study = document.getElementById("study").checked;
-		var office = document.getElementById("office").checked;
-		var party = document.getElementById("party").checked;
-		var other = document.getElementById("other").checked;
-		var category;
-
-		if(club){
-			category = "Club Meeting";
-		}
-		if(study){
-			category = "Study Group";
-		}
-		if(office){
-			category = "Office Hours";
-		}
-		if(party){
-			category = "Party";
-		}
-		if(other){
-			category = "Other";
-		}
-
-		if(document.getElementById("time1")){
-			var time1 = document.getElementById("time1").value;
-			var time2 = document.getElementById("time2").value;
-		}
-		var eventsList = Events.find({},{sort: {"date": 1, "startTime": 1}});
-		if(category){
-			eventsList = Events.find({category:category},{sort: {"date": 1, "startTime": 1}});
-		}
-		if(attending && category){
-			eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(large && category){
-			eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(my && category) {
-			eventsList = Events.find( { $and: [ {adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(attending && !category){
-			eventsList = Events.find( { $and: [ {attendees: Meteor.user()} ] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(large && !category){
-			eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} }] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(my && !category) {
-			eventsList = Events.find( { $and: [ {adminId: Meteor.userId()} ] },{sort: {"date": 1, "startTime": 1}});
-		}
-		if(date1 && date2){
-			$("#times-between").show();
-			var newTime1 = time1;
-			var newTime2 = time2;
-			if(!time1 || !time2){
-				newTime1 = "00:00";
-				newTime2 = "23:59";
-			}
-			var minutes1 = (parseInt(newTime1.split(":")[1]) - 1) + "";
-			var minutes2 = (parseInt(newTime2.split(":")[1]) + 1) + "";
-			var eventDate1 = new Date(date1.split("-")[0],date1.split("-")[1]-1,date1.split("-")[2], newTime1.split(":")[0], minutes1, 0);
-			var eventDate2 = new Date(date2.split("-")[0],date2.split("-")[1]-1,date2.split("-")[2], newTime2.split(":")[0], minutes2, 0);
-
-			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } }] } ,{sort: {"date": 1, "startTime": 1}})
-			if(category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category:category}] } ,{sort: {"date": 1, "startTime": 1}})
-			}
-			if(attending && category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
-			}
-			if(large && category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
-			}
-			if(my && category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}})
-			}
-			if(attending && !category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
-			}
-			if(large && !category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} } ] },{sort: {"date": 1, "startTime": 1}})
-			}
-			if(my && !category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()} ] },{sort: {"date": 1, "startTime": 1}})
-			}
-		}
-		else{
-			$("#times-between").hide();
-		}
-		eventsList=eventsList.fetch();
-		Session.set("events",eventsList);
-		
-		// Visible events list may have changed so update variable
-		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
-
-		// Hide all the markers
-		for (var m in window.markers)
-			window.markers[m].setVisible(false);
-		// If interval-view is on, filterMarkers on new events list
-		if ($("#time_checkbox")[0].checked){
-			filterMarkers($("#time_slider")[0].value);
-		} else {
-			// Otherwise, make all disappear and reappear only the ones on the event list
-			for (var i = 0; i < events.length; i++)
-				window.markers[events[i]._id].setVisible(true);
-		}
+		window.filterStuff(evt);
 	}
 });

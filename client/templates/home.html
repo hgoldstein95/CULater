@@ -17,12 +17,12 @@
                   </div>
                   <div class="col-lg-8">
                     <p id="slide-text">Slide to see what events are happening soon:</p>
-                    <input id="time_slider" type="range" min="0" max="23" step="1" value="0" onchange="sliderMoved(this.value)" disabled/>
+                    <input id="time_slider" type="range" min="0" max="23" step="1" value="0" onchange="window.filterStuff(undefined)" disabled/>
                   </div>
                   <div class="col-lg-4">
                     <span class="col-lg-8">
                       <span id="slide-text">2-hr view</span>
-                      <input id="time_checkbox" onclick="toggleTime()" type="checkbox"/>
+                      <input id="time_checkbox" onclick="window.filterStuff(undefined)" type="checkbox"/>
                     </span>
                   </div>
                   <div class="col-lg-6" id="slider-val"></div>
@@ -133,7 +133,7 @@
                     {{#each events}}
 
                       {{#if notAlreadyHappened this}}
-                        <div class="panel {{mine _id}} {{largeEvent _id}}" id="event-container_{{_id}}">
+                        <div class="panel {{mine _id}} {{largeEvent _id}}" id="event-container_{{_id}}" onload="window.alert('ha')">
                           <div class="panel-heading {{mine _id}} {{largeEvent _id}}" role="tab">
                             <h4 class="panel-title">
                               <a id="link_{{_id}}" onclick="window.updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">

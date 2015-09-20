@@ -9,6 +9,7 @@ Template.dialogModal.events({
     /* Remove marker from map */
 	  window.removeMarker(eventId);
     }
-    Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+    // Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+    window.filterStuff(undefined);
   }
 });
