@@ -1,7 +1,7 @@
 .content-section-a {
   margin-top: 20px;
   padding-bottom: 100px;
-  padding-top: 80px;
+  padding-top: 20px;
   .list-group-item a {
     color: black;
     &:hover,
@@ -96,3 +96,10 @@
   margin: 0;
   display: block;
 }
+
+.slogan {
+  font-size: 30px;
+  padding: 20px 25px;
+  font-family: 'Sansita One', cursive;
+}
+

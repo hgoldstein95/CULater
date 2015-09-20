@@ -1,14 +1,29 @@
 <template name='home'>
   {{> nav}}
+  <link href='https://fonts.googleapis.com/css?family=Sansita+One' rel='stylesheet' type='text/css'>
     <!-- Page Content -->
 	<a  name="services"></a>
     <div class="content-section-a">
         <div class="container">
             <div class="row">
 
+              <div class="slogan">
+                <!-- Bringing CORNELL together -->
+              </div>
+
                 <div class="col-lg-8 col-sm-12">
                   <div id="map">
                   	{{> googleMap name="map" options=mapOptions}}
+                  </div>
+                  <div class="col-lg-8">
+                    <input id="time_slider" type="range" min="0" max="24" step="2" value="0" onchange="sliderMoved(this.value)"/>
+                  </div>
+                  <div class="col-lg-4">
+                    <span class="col-lg-6" id="slider_val"></span>
+                    <span class="col-lg-6">
+                      <span>2-hr view</span>
+                      <input id="time_checkbox" onclick="toggleTime()" type="checkbox" checked/>
+                    </span>
                   </div>
                 </div>
 
@@ -91,15 +106,15 @@
 
 
 
-                  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="overflow:scroll; height:400px;">
 
                     {{#each events}}
 
                       {{#if notAlreadyHappened this}}
-                        <div class="panel {{mine _id}} {{largeEvent _id}}" id="event-container">
+                        <div class="panel {{mine _id}} {{largeEvent _id}}" id="event-container_{{_id}}">
                           <div class="panel-heading {{mine _id}} {{largeEvent _id}}" role="tab">
                             <h4 class="panel-title">
-                              <a id="link_{{_id}}" onclick="updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
+                              <a id="link_{{_id}}" onclick="window.updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
                                 <span class="eventTitle">{{name}}</span>
                                 {{#if sameDay date}}
                                   <span class="badge" style="float:right">In {{getTimeToEvent startTime}} {{pluralize startTime}}</span>
