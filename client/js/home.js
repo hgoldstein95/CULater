@@ -38,8 +38,10 @@ window.toggleTime = function() {
 		
 		// Show all events
 		for (var i = 0; i < events.length; i++) {
-			window.markers[events[i]._id].setVisible(true);
-			$("#event-container_"+events[i]._id).css("display", "block");
+			if(window.markers[events[i]._id]){
+				window.markers[events[i]._id].setVisible(true);
+				$("#event-container_"+events[i]._id).css("display", "block");
+			}
 		}
 	}
 }
@@ -64,13 +66,14 @@ function filterMarkers(val) {
 		end_time.setSeconds("0");
 		end_time.setMinutes("0");
 		end_time.setHours(end_time.getHours() + parseInt(val) + 2);
-
-		if (event_time >= start_time && event_time < end_time){
-			window.markers[events[i]._id].setVisible(true);
-			$("#event-container_"+events[i]._id).css("display", "block");
-		} else{
-			window.markers[events[i]._id].setVisible(false);
-			$("#event-container_"+events[i]._id).css("display", "none");
+		if(window.markers[events[i]._id]){
+			if (event_time >= start_time && event_time < end_time){
+				window.markers[events[i]._id].setVisible(true);
+				$("#event-container_"+events[i]._id).css("display", "block");
+			} else{
+				window.markers[events[i]._id].setVisible(false);
+				$("#event-container_"+events[i]._id).css("display", "none");
+			}
 		}
 	}
 }
@@ -265,12 +268,12 @@ Template.home.helpers({
 		}
 	},
 	getAdmin: function(userId){
-		if(Meteor.users.findOne({_id: userId}).services){
+		if(Meteor.users.findOne({_id: userId}) && Meteor.users.findOne({_id: userId}).services){
 			return Meteor.users.findOne({_id: userId}).services.google.given_name + " " + Meteor.users.findOne({_id: userId}).services.google.family_name;
 		}
 	},
     getAdminNetId: function(userId) {
-    	if(Meteor.users.findOne({_id: userId}).services){
+    	if(Meteor.users.findOne({_id: userId}) && Meteor.users.findOne({_id: userId}).services){
     		return Meteor.users.findOne({_id: userId}).services.google.email.split("@")[0];
     	}
     },
