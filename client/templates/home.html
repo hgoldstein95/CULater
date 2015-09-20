@@ -42,16 +42,7 @@
                 <div id="filter-events">
                   <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Filter <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <!--<li>
-                      <div class="filter-partition" id="category-container">
-                          <p class="filter-header">Category</p>
-                          <select id="category" class="form-control">
-                            {{#each categoryNames}}
-                              <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                          </select>
-                        </div>
-                    </li> -->
+                    
                     <li>
                       <div class="filter-partition" id="which-events">
                         <p class="filter-header">Which Events?</p>
@@ -100,6 +91,36 @@
                           <div class="time2-input">
                             <input type="time" class="form-control filter-field" id="time2">
                           </div>
+                        </div>
+                    </li>
+                    <li>
+                      <div class="filter-partition" id="category-container">
+                          <p class="filter-header">Category</p>
+                            <div>
+                              <label>
+                                <input class="filter-field category-checkbox" id="club" type="checkbox" checked> Club Meeting
+                              </label>
+                            </div>
+                            <div>
+                              <label>
+                                <input class="filter-field category-checkbox" id="study" type="checkbox"> Study Group
+                              </label>
+                            </div>
+                            <div>
+                              <label>
+                                <input class="filter-field category-checkbox" id="office" type="checkbox"> Office Hours
+                              </label>
+                            </div>
+                            <div>
+                              <label>
+                                <input class="filter-field category-checkbox" id="party" type="checkbox"> Party
+                              </label>
+                            </div>
+                            <div>
+                              <label>
+                                <input class="filter-field category-checkbox" id="other" type="checkbox"> Other
+                              </label>
+                            </div>
                         </div>
                     </li>
                   </ul>

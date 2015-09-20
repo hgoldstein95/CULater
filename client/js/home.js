@@ -296,10 +296,14 @@ Template.home.helpers({
 		}
 	},
 	getAdmin: function(userId){
-		return Meteor.users.findOne({_id: userId}).services.google.given_name + " " + Meteor.users.findOne({_id: userId}).services.google.family_name;
+		if(Meteor.users.findOne({_id: userId}).services){
+			return Meteor.users.findOne({_id: userId}).services.google.given_name + " " + Meteor.users.findOne({_id: userId}).services.google.family_name;
+		}
 	},
     getAdminNetId: function(userId) {
-    	return Meteor.users.findOne({_id: userId}).services.google.email.split("@")[0];
+    	if(Meteor.users.findOne({_id: userId}).services){
+    		return Meteor.users.findOne({_id: userId}).services.google.email.split("@")[0];
+    	}
     },
     datesPresent: function() {
     	console.log("hello");
@@ -366,6 +370,9 @@ Template.home.events({
 	'change .checkbox': function(evt) {
     	$('.checkbox').not($(evt.target)).prop('checked', false);  
 	},
+	'change .category-checkbox': function(evt) {
+    	$('.category-checkbox').not($(evt.target)).prop('checked', false);  
+	},
 	'change .filter-field': function(evt) {
 		var all = document.getElementById("all").checked;
 		var attending = document.getElementById("attending").checked;
@@ -373,23 +380,42 @@ Template.home.events({
 		var my = document.getElementById("my").checked;
 		var date1 = document.getElementById("date1").value;
 		var date2 = document.getElementById("date2").value;
-		//var category = document.getElementById("category").value;
+		var club = document.getElementById("club").checked;
+		var study = document.getElementById("study").checked;
+		var office = document.getElementById("office").checked;
+		var party = document.getElementById("party").checked;
+		var other = document.getElementById("other").checked;
+		var category;
 
-		//console.log(category);
+		if(club){
+			category = "Club Meeting";
+		}
+		if(study){
+			category = "Study Group";
+		}
+		if(office){
+			category = "Office Hours";
+		}
+		if(party){
+			category = "Party";
+		}
+		if(other){
+			category = "Other";
+		}
 
 		if(document.getElementById("time1")){
 			var time1 = document.getElementById("time1").value;
 			var time2 = document.getElementById("time2").value;
 		}
-		var eventsList = Events.find({},{sort: {"date": 1, "startTime": 1}});
+		var eventsList = Events.find({category:category},{sort: {"date": 1, "startTime": 1}});
 		if(attending){
-			eventsList = Events.find({attendees: Meteor.user()},{sort: {"date": 1, "startTime": 1}});
+			eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(large){
-			eventsList = Events.find({numAttendees: { $gt: 99} },{sort: {"date": 1, "startTime": 1}});
+			eventsList = Events.find( { $and: [ {numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(my) {
-			eventsList = Events.find({adminId: Meteor.userId()},{sort: {"date": 1, "startTime": 1}});
+			eventsList = Events.find( { $and: [ {adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
 		if(date1 && date2){
 			$("#times-between").show();
@@ -404,15 +430,15 @@ Template.home.events({
 			var eventDate1 = new Date(date1.split("-")[0],date1.split("-")[1]-1,date1.split("-")[2], newTime1.split(":")[0], minutes1, 0);
 			var eventDate2 = new Date(date2.split("-")[0],date2.split("-")[1]-1,date2.split("-")[2], newTime2.split(":")[0], minutes2, 0);
 
-			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } }] } ,{sort: {"date": 1, "startTime": 1}})
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category:category}] } ,{sort: {"date": 1, "startTime": 1}})
 			if(attending){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(large){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} } ] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(my){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()}] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
 		}
 		else{
@@ -421,7 +447,4 @@ Template.home.events({
 		eventsList=eventsList.fetch();
 		Session.set("events",eventsList);
 	}
-	//'onchange #category': function(evt) {
-	//	console.log("hello");
-	//}
 });
