@@ -160,11 +160,12 @@ Template.home.rendered = function() {
 		if(!Meteor.user()) {
 			Router.go('/login');
 		}
+		Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
 	}, 250);
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
-	Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+	
 };
 
 function tConvert (time) {
