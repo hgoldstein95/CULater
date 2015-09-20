@@ -15,13 +15,31 @@ window.addMarker = function (newEvent, open) {
   		$("#link_"+newEvent._id).click();
   	});
   	window.markers[newEvent._id] = marker;
-	sliderMoved($("#time_slider")[0].value);
+	window.toggleTime();
+	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 }
 
 window.removeMarker = function (eventId) {
 	window.markers[eventId].setMap(null);
 	google.maps.event.clearInstanceListeners(window.markers[eventId]);
 	delete window.markers[eventId];
+	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+}
+
+window.toggleTime = function() {
+	if ($("#time_checkbox")[0].checked){
+		$("#time_slider").prop("disabled", false);
+		window.sliderMoved($("#time_slider")[0].value);
+	} else {
+		$("#time_slider").prop("disabled", true);
+		$("#slider_val").html("");
+		
+		// Show all events
+		for (var i = 0; i < events.length; i++) {
+			window.markers[events[i]._id].setVisible(true);
+			$("#event-container_"+events[i]._id).css("display", "block");
+		}
+	}
 }
 
 function filterMarkers(val) {
@@ -42,10 +60,13 @@ function filterMarkers(val) {
 		end_time.setMinutes("0");
 		end_time.setHours(end_time.getHours() + parseInt(val) + 2);
 
-		if (event_time >= start_time && event_time < end_time)
+		if (event_time >= start_time && event_time < end_time){
 			window.markers[events[i]._id].setVisible(true);
-		else
+			$("#event-container_"+events[i]._id).css("display", "block");
+		} else{
 			window.markers[events[i]._id].setVisible(false);
+			$("#event-container_"+events[i]._id).css("display", "none");
+		}
 	}
 }
 
@@ -60,6 +81,9 @@ Template.home.onCreated(function(){
 		Events.find().observe({
 			added: function (newEvent) {
 				window.addMarker(newEvent, false);
+				// Switch to viewing all events
+				$("#time_checkbox").attr("checked", false);
+				window.toggleTime();
 			}
 		});
 	});
@@ -82,7 +106,9 @@ Template.home.onCreated(function(){
 	window.sliderMoved = function (val) {
 		// Update Slider Label
 		var hours = (new Date().getHours()+parseInt(val))%24;
-		if (hours > 12)
+		if (hours == 12)
+			$("#slider_val").html(hours+":00 PM");
+		else if (hours > 12)
 			$("#slider_val").html((hours-12)+":00 PM");
 		else
 			$("#slider_val").html(hours+":00 AM");
@@ -187,7 +213,7 @@ Template.home.helpers({
 			window.markers[eventId].setMap(null);
 			google.maps.event.clearInstanceListeners(window.markers[eventId]);
 			delete window.markers[eventId];
-			sliderMoved($("#time_slider")[0].value);
+			window.toggleTime();
 			
 			return false;
 		}
@@ -235,7 +261,7 @@ Template.home.events({
   	},
 
   	'click #label-switch': function(evt) {
-  	 	$('.notMine#event-container').toggle();
+  	 	$('.notMine').toggle();
   	},
 	'click #join-button': function(evt) {
 		evt.preventDefault();

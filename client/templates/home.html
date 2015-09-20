@@ -15,10 +15,16 @@
                   <div id="map">
                   	{{> googleMap name="map" options=mapOptions}}
                   </div>
-                  <span>
+                  <div class="col-lg-8">
                     <input id="time_slider" type="range" min="0" max="24" step="2" value="0" onchange="sliderMoved(this.value)"/>
-                    <span id="slider_val"></span>
-                  </span>
+                  </div>
+                  <div class="col-lg-4">
+                    <span class="col-lg-6" id="slider_val"></span>
+                    <span class="col-lg-6">
+                      <span>2-hr view</span>
+                      <input id="time_checkbox" onclick="toggleTime()" type="checkbox" checked/>
+                    </span>
+                  </div>
                 </div>
 
 
@@ -41,7 +47,7 @@
                     {{#each events}}
 
                       {{#if notAlreadyHappened this}}
-                        <div class="panel panel-default {{mine _id}}" id="event-container">
+                        <div class="panel panel-default {{mine _id}}" id="event-container_{{_id}}">
                           <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
                               <a id="link_{{_id}}" onclick="window.updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
