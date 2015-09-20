@@ -365,8 +365,7 @@ Template.home.events({
 		var my = document.getElementById("my").checked;
 		var date1 = document.getElementById("date1").value;
 		var date2 = document.getElementById("date2").value;
-		var category = document.getElementById("category").value;
-		console.log(category);
+
 		if(document.getElementById("time1")){
 			var time1 = document.getElementById("time1").value;
 			var time2 = document.getElementById("time2").value;
@@ -394,17 +393,15 @@ Template.home.events({
 			var eventDate1 = new Date(date1.split("-")[0],date1.split("-")[1]-1,date1.split("-")[2], newTime1.split(":")[0], minutes1, 0);
 			var eventDate2 = new Date(date2.split("-")[0],date2.split("-")[1]-1,date2.split("-")[2], newTime2.split(":")[0], minutes2, 0);
 
-			if(all){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category: category} ] } ,{sort: {"date": 1, "startTime": 1}})
-			}
+			eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } }] } ,{sort: {"date": 1, "startTime": 1}})
 			if(attending){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(large){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} } ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(my){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()}] },{sort: {"date": 1, "startTime": 1}})
 			}
 		}
 		else{
