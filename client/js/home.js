@@ -356,7 +356,7 @@ window.filterStuff = function(evt) {
 		eventsList = Events.find( { $and: [ {adminId: Meteor.userId()} ] },{sort: {"date": 1, "startTime": 1}});
 	}
 	if(date1 && date2){
-		$("#times-between").show();
+		//$("#times-between").show();
 		var newTime1 = time1;
 		var newTime2 = time2;
 		if(!time1 || !time2){
