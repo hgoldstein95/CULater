@@ -169,6 +169,19 @@
                                 <a id="edit-event" data-toggle="modal" data-target="#form-modal" data-eventid="{{_id}}">Edit</a>
                                 <a id="delete-event" data-eventid="{{_id}}">Delete</a>
                               {{/if}}
+                              <div title="Add to Calendar" class="addthisevent">
+                                Add to Calendar
+                                <span class="start">{{getDate date}} {{getTime startTime}}</span>
+                                <span class="end">{{getDate date}} {{getTime endTime}}</span>
+                                <span class="timezone">America/New_York</span>
+                                <span class="title">{{name}}</span>
+                                <span class="description">{{description}}</span>
+                                <span class="location">{{location}}</span>
+                                <span class="organizer">{{getAdmin adminId}}</span>
+                                <span class="organizer_email">{{getAdminNetId adminId}}@cornell.edu</span>
+                                <span class="all_day_event">false</span>
+                                <span class="date_format">MM/DD/YYYY</span>
+                              </div>
                             </div>
                           </div>
                         </div>
