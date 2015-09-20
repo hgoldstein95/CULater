@@ -50,14 +50,17 @@ function filterMarkers(val) {
 	for (var i = 0; i < events.length; i++) {
 		// Check that the date is within 2 hours of the slider time
 		var start_time = new Date();
+		start_time.setMilliseconds("0");
 		start_time.setSeconds("0");
 		start_time.setMinutes("0");
 		start_time.setHours(start_time.getHours() + parseInt(val));
 
 		var event_time = new Date(events[i].date + "T" + events[i].startTime + ":00Z");
+		event_time.setMilliseconds("0");
 		event_time.setMinutes(event_time.getMinutes() + event_time.getTimezoneOffset());
 
 		var end_time = new Date();
+		end_time.setMilliseconds("0");
 		end_time.setSeconds("0");
 		end_time.setMinutes("0");
 		end_time.setHours(end_time.getHours() + parseInt(val) + 2);
@@ -82,42 +85,8 @@ Template.home.onCreated(function(){
 		// Make the map reactive
 		Events.find().observe({
 			added: function (newEvent) {
-				var marker = new google.maps.Marker({
-			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
-			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime,
-			  		icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-			  	});
-			  	marker.addListener('click', function(){
-			  		$("#link_"+newEvent._id).click();
-			  	});
-			  	markers[newEvent._id] = marker;
-			},
-			removed: function (oldEvent) {
-				if(markers[oldEvent._id]){
-					markers[oldEvent._id].setMap(null);
-					google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
-					delete markers[oldEvent._id];
-				}
-			},
-			changed: function (newEvent, oldEvent) {
-				// Remove old Marker
-				markers[oldEvent._id].setMap(null);
-				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
-				delete markers[oldEvent._id];
-
-				// Create new Marker
-				var marker = new google.maps.Marker({
-			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
-			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime,
-			  		icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-			  	});
-			  	marker.addListener('click', function(){
-			  		$("#link_"+newEvent._id).click();
-			  	});
-			  	markers[newEvent._id] = marker;
 				window.addMarker(newEvent, false);
+				
 				// Switch to viewing all events
 				$("#time_checkbox").attr("checked", false);
 				window.toggleTime();
