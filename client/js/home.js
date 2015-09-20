@@ -440,6 +440,9 @@ Template.home.events({
 	'click a#delete-event': function(evt) {
 	    $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
 	    $('#dialogModal').modal();
+	    $('.checkbox').prop('checked', false);
+	    $('#all').prop('checked',true);
+	    $('.category-checkbox').prop('checked', false); 
   	},
 
   	'click #label-switch': function(evt) {
