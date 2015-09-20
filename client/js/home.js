@@ -34,7 +34,7 @@ window.toggleTime = function() {
 		window.sliderMoved($("#time_slider")[0].value);
 	} else {
 		$("#time_slider").prop("disabled", true);
-		$("#slider_val").html("");
+		$("#slider-val").html("");
 		
 		// Show all events
 		for (var i = 0; i < events.length; i++) {
@@ -147,11 +147,11 @@ Template.home.onCreated(function(){
 		// Update Slider Label
 		var hours = (new Date().getHours()+parseInt(val))%24;
 		if (hours == 12)
-			$("#slider_val").html(hours+":00 PM");
+			$("#slider-val").html(hours+":00 PM");
 		else if (hours > 12)
-			$("#slider_val").html((hours-12)+":00 PM");
+			$("#slider-val").html((hours-12)+":00 PM");
 		else
-			$("#slider_val").html(hours+":00 AM");
+			$("#slider-val").html(hours+":00 AM");
 
 		filterMarkers(val);
 	}
