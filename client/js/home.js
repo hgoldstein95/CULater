@@ -94,10 +94,18 @@ Template.home.helpers({
     },
     'mine': function(eventId) {
     	if( Meteor.userId() == Events.findOne({_id:eventId}).adminId){
-    		return "mine";
+    		return "mine panel-info";
     	}
-    	return "notMine";
+    	return "notMine panel-default";
     },
+    'largeEvent': function(eventId){
+    	if( !(Meteor.userId() == Events.findOne({_id:eventId}).adminId)){
+    		if(Events.findOne({_id:eventId})){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
     'getDate': function(date) {
     	date = date.split('-');
     	var formatDate = new Date(date);

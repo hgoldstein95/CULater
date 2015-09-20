@@ -23,8 +23,8 @@
                     {{#each events}}
 
                       {{#if notAlreadyHappened this}}
-                        <div class="panel panel-default {{mine _id}}" id="event-container">
-                          <div class="panel-heading" role="tab">
+                        <div class="panel {{mine _id}} {{largeEvent _id}}" id="event-container">
+                          <div class="panel-heading {{mine _id}} {{largeEvent _id}}" role="tab">
                             <h4 class="panel-title">
                               <a id="link_{{_id}}" onclick="updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
                                 <span class="eventTitle">{{name}}</span>
