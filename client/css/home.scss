@@ -105,3 +105,13 @@
   padding: 20px 25px;
   font-family: 'Sansita One', cursive;
 }
+
+#slide-text, #slider-val {
+  color: black;
+   -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: grey;
+  font-size: 18px;
+}
+
+
