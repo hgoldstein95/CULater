@@ -42,6 +42,16 @@
                 <div id="filter-events">
                   <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Filter <b class="caret"></b></a>
                   <ul class="dropdown-menu">
+                    <!--<li>
+                      <div class="filter-partition" id="category-container">
+                          <p class="filter-header">Category</p>
+                          <select id="category" class="form-control">
+                            {{#each categoryNames}}
+                              <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                    </li> -->
                     <li>
                       <div class="filter-partition" id="which-events">
                         <p class="filter-header">Which Events?</p>
@@ -82,7 +92,7 @@
                     </li>
                     <li>
                         <div class="filter-partition" id="times-between" style="display:none;">
-                          <p class="filter-header">Time Between</p>
+                          <p class="filter-header">Start Time Between</p>
                           <div class="time1-input">
                             <input type="time" class="form-control filter-field" id="time1">
                           </div>
@@ -92,16 +102,6 @@
                           </div>
                         </div>
                     </li>
-                    <!--<li>
-                      <div class="filter-partition" id="category-container">
-                          <p class="filter-header">Category</p>
-                          <select id="category" class="form-control">
-                            {{#each categoryNames}}
-                              <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                          </select>
-                        </div>
-                    </li>-->
                   </ul>
                 </div>
                 
@@ -132,6 +132,8 @@
                               <p>{{getDate date}}</p>
                               <p>{{getTime startTime}} - {{getTime endTime}}</p>
                               <p>{{location}}</p>
+                              <br>
+                              <p>{{category}}</p>
                               <br>
                               <p>{{description}}</p>
                               <br>

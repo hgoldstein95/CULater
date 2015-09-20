@@ -128,14 +128,17 @@ Template.home.onCreated(function(){
 		var openDivs = $(".collapse.in");
 
 		// Toggle icon of clicked event
-		if (window.markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png")
+		if (window.markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png") {
 			window.markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-		else
+		}
+		else {
 			window.markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+		}
 
 		// Revert icon of other opened events
-		if (openDivs.length > 0)
+		if (openDivs.length > 0) {
 			window.markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+		}
 	}
 
 	window.sliderMoved = function (val) {
@@ -157,11 +160,12 @@ Template.home.rendered = function() {
 		if(!Meteor.user()) {
 			Router.go('/login');
 		}
+		Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
 	}, 250);
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
-	Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+	
 };
 
 function tConvert (time) {
@@ -365,6 +369,9 @@ Template.home.events({
 		var my = document.getElementById("my").checked;
 		var date1 = document.getElementById("date1").value;
 		var date2 = document.getElementById("date2").value;
+		//var category = document.getElementById("category").value;
+
+		//console.log(category);
 
 		if(document.getElementById("time1")){
 			var time1 = document.getElementById("time1").value;
@@ -410,4 +417,7 @@ Template.home.events({
 		eventsList=eventsList.fetch();
 		Session.set("events",eventsList);
 	}
+	//'onchange #category': function(evt) {
+	//	console.log("hello");
+	//}
 });
