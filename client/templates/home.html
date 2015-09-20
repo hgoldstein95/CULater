@@ -44,7 +44,7 @@
                         <div class="panel panel-default {{mine _id}}" id="event-container">
                           <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
+                              <a id="link_{{_id}}" onclick="window.updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
                                 <span class="eventTitle">{{name}}</span>
                                 {{#if sameDay date}}
                                   <span class="badge" style="float:right">In {{getTimeToEvent startTime}} {{pluralize startTime}}</span>
