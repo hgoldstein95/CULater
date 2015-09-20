@@ -25,5 +25,5 @@ Meteor.startup(function(){
 });
 
 Meteor.methods({
-	eventsOnHooksInit : function(){}
+
 });

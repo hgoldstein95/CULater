@@ -150,8 +150,8 @@ function tConvert (time) {
 
 Template.home.helpers({
 	'events': function() {
-        //return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
-        return Session.get("events");
+        return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+        //return Session.get("events");
     },
     'myEvent': function(eventId) {
     	if(Events.findOne({_id:eventId})){
@@ -312,6 +312,9 @@ Template.home.events({
 	'click a#delete-event': function(evt) {
 	    $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
 	    $('#dialogModal').modal();
+	    $('.checkbox').prop('checked', false);
+	    $('#all').prop('checked',true);
+	    $('.category-checkbox').prop('checked', false); 
   	},
 
   	'click #label-switch': function(evt) {
@@ -448,8 +451,23 @@ Template.home.events({
 			filterMarkers($("#time_slider")[0].value);
 		} else {
 			// Otherwise, make all disappear and reappear only the ones on the event list
-			for (var i = 0; i < events.length; i++)
-				window.markers[events[i]._id].setVisible(true);
+			if(events[i] && window.markers[events[i]._id]){
+				for (var i = 0; i < events.length; i++)
+					window.markers[events[i]._id].setVisible(true);
+			}
+		}
+		allEvents = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+		var allEventNames = _.chain(allEvents).values().flatten().pluck("name").uniq().value();
+		var eventNames = _.chain(eventsList).values().flatten().pluck("name").uniq().value()
+		for(var i = 0; i < allEventNames.length; i++){
+			if(eventNames.indexOf(allEventNames[i])==-1){
+				var eventId = allEvents[i]._id;
+				$("#event-container_" + eventId).hide();
+			}
+			else{
+				var eventId = allEvents[i]._id;
+				$("#event-container_" + eventId).show();
+			}
 		}
 	}
 });
