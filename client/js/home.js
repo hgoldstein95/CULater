@@ -1,50 +1,89 @@
 var central_campus = {lat: 42.447578, lng: -76.480256};
-var map;
 var events = [];
-var markers = {};
+
+window.markers = {};
+
+window.addMarker = function (newEvent, open) {
+	var color = open ? "green" : "red";
+	var marker = new google.maps.Marker({
+  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
+  		map: window.map.instance,
+  		title: newEvent.location,
+  		icon: "http://maps.google.com/mapfiles/ms/icons/" + color + "-dot.png"
+  	});
+  	marker.addListener('click', function(){
+  		$("#link_"+newEvent._id).click();
+  	});
+  	window.markers[newEvent._id] = marker;
+	window.toggleTime();
+	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+}
+
+window.removeMarker = function (eventId) {
+	window.markers[eventId].setMap(null);
+	google.maps.event.clearInstanceListeners(window.markers[eventId]);
+	delete window.markers[eventId];
+	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+}
+
+window.toggleTime = function() {
+	if ($("#time_checkbox")[0].checked){
+		$("#time_slider").prop("disabled", false);
+		window.sliderMoved($("#time_slider")[0].value);
+	} else {
+		$("#time_slider").prop("disabled", true);
+		$("#slider_val").html("");
+		
+		// Show all events
+		for (var i = 0; i < events.length; i++) {
+			window.markers[events[i]._id].setVisible(true);
+			$("#event-container_"+events[i]._id).css("display", "block");
+		}
+	}
+}
+
+function filterMarkers(val) {
+	// Filter out Markers
+	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	for (var i = 0; i < events.length; i++) {
+		// Check that the date is within 2 hours of the slider time
+		var start_time = new Date();
+		start_time.setSeconds("0");
+		start_time.setMinutes("0");
+		start_time.setHours(start_time.getHours() + parseInt(val));
+
+		var event_time = new Date(events[i].date + "T" + events[i].startTime + ":00Z");
+		event_time.setMinutes(event_time.getMinutes() + event_time.getTimezoneOffset());
+
+		var end_time = new Date();
+		end_time.setSeconds("0");
+		end_time.setMinutes("0");
+		end_time.setHours(end_time.getHours() + parseInt(val) + 2);
+
+		if (event_time >= start_time && event_time < end_time){
+			window.markers[events[i]._id].setVisible(true);
+			$("#event-container_"+events[i]._id).css("display", "block");
+		} else{
+			window.markers[events[i]._id].setVisible(false);
+			$("#event-container_"+events[i]._id).css("display", "none");
+		}
+	}
+}
 
 Template.home.onCreated(function(){
 	// Set up Map
 	GoogleMaps.ready('map', function(map){
 		// Query Events
 		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+		window.map = map;
 
 		// Make the map reactive
 		Events.find().observe({
 			added: function (newEvent) {
-				var marker = new google.maps.Marker({
-			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
-			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime,
-			  		icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-			  	});
-			  	marker.addListener('click', function(){
-			  		$("#link_"+newEvent._id).click();
-			  	});
-			  	markers[newEvent._id] = marker;
-			},
-			removed: function (oldEvent) {
-				markers[oldEvent._id].setMap(null);
-				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
-				delete markers[oldEvent._id];
-			},
-			changed: function (newEvent, oldEvent) {
-				// Remove old Marker
-				markers[oldEvent._id].setMap(null);
-				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
-				delete markers[oldEvent._id];
-
-				// Create new Marker
-				var marker = new google.maps.Marker({
-			  		position: {lat: newEvent.latitude, lng: newEvent.longitude},
-			  		map: map.instance,
-			  		title: newEvent.name + " at " + newEvent.startTime,
-			  		icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-			  	});
-			  	marker.addListener('click', function(){
-			  		$("#link_"+newEvent._id).click();
-			  	});
-			  	markers[newEvent._id] = marker;
+				window.addMarker(newEvent, false);
+				// Switch to viewing all events
+				$("#time_checkbox").attr("checked", false);
+				window.toggleTime();
 			}
 		});
 	});
@@ -54,14 +93,27 @@ Template.home.onCreated(function(){
 		var openDivs = $(".collapse.in");
 
 		// Toggle icon of clicked event
-		if (markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png")
-			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+		if (window.markers[obj.id].getIcon() == "http://maps.google.com/mapfiles/ms/icons/green-dot.png")
+			window.markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
 		else
-			markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+			window.markers[obj.id].setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
 
 		// Revert icon of other opened events
 		if (openDivs.length > 0)
-			markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+			window.markers[openDivs[0].id].setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+	}
+
+	window.sliderMoved = function (val) {
+		// Update Slider Label
+		var hours = (new Date().getHours()+parseInt(val))%24;
+		if (hours == 12)
+			$("#slider_val").html(hours+":00 PM");
+		else if (hours > 12)
+			$("#slider_val").html((hours-12)+":00 PM");
+		else
+			$("#slider_val").html(hours+":00 AM");
+
+		filterMarkers(val);
 	}
 });
 
@@ -155,7 +207,14 @@ Template.home.helpers({
 		if(endDate <= currentDate){
 			Events.remove({
 				_id: Event._id
-			})
+			});
+		    
+		    /* Remove marker from map */
+			window.markers[eventId].setMap(null);
+			google.maps.event.clearInstanceListeners(window.markers[eventId]);
+			delete window.markers[eventId];
+			window.toggleTime();
+			
 			return false;
 		}
 		return true;
@@ -202,7 +261,7 @@ Template.home.events({
   	},
 
   	'click #label-switch': function(evt) {
-  	 	$('.notMine#event-container').toggle();
+  	 	$('.notMine').toggle();
   	},
 	'click #join-button': function(evt) {
 		evt.preventDefault();
