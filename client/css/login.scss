@@ -38,7 +38,7 @@ h3{
   border-radius: 4px;
   padding: 10px 16px;
 }
-  
+
 .btn-lg {
   font-size: 18px;
   line-height: 1.33;
@@ -115,6 +115,11 @@ h3{
   height: 100%;
 }
 
+.intro-message img {
+	width: 600px;
+	max-width: 80%;
+}
+
 @media (min-aspect-ratio: 16/9) {
   .fullscreen-bg__video {
     height: 300%;
@@ -137,5 +142,7 @@ h3{
   .fullscreen-bg__video {
     display: none;
   }
+	.intro-header {
+		background: rgba(0, 0, 0, 0.2);
+	}
 }
-

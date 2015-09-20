@@ -21,6 +21,8 @@ div#parent {
 	overflow: hidden;
 }
 
-ul.nav li {
-  padding-top:5px;
+@media (max-width: 767px) {
+  .right {
+    display: none;
+  }
 }
