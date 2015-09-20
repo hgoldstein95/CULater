@@ -85,16 +85,10 @@ Template.home.onCreated(function(){
 		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 		window.map = map;
 
-		// Make the map reactive
-		Events.find().observe({
-			added: function (newEvent) {
-				window.addMarker(newEvent, false);
-				
-				// Switch to viewing all events
-				$("#time_checkbox").attr("checked", false);
-				window.toggleTime();
-			}
-		});
+		// Create initial markers
+		for (var i = 0; i < events.length; i++) {
+			window.addMarker(events[i], false);
+		}
 	});
 
 	// Function to update Marker colors

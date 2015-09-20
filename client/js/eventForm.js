@@ -59,6 +59,12 @@ Template.eventForm.events({
     $("#modal-close").click();
     $("form")[0].reset();
     Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+
+    // Create new marker on map
+    window.addMarker(newEvent, false);
+    // Switch to viewing all events
+    $("#time_checkbox").attr("checked", false);
+    window.toggleTime();
   },
 
   'submit form.edit-event': function(evt) {
