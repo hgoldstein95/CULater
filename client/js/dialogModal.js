@@ -6,7 +6,7 @@ Template.dialogModal.events({
         _id: eventId
       });
 
-      /* Remove marker from map */
+    /* Remove marker from map */
 	  window.removeMarker(eventId);
     }
     Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
