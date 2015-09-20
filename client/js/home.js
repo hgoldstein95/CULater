@@ -16,7 +16,7 @@ window.addMarker = function (newEvent, open) {
   	});
   	window.markers[newEvent._id] = marker;
 	window.toggleTime();
-	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 }
 
 window.removeMarker = function (eventId) {
@@ -24,7 +24,7 @@ window.removeMarker = function (eventId) {
 		window.markers[eventId].setMap(null);
 		google.maps.event.clearInstanceListeners(window.markers[eventId]);
 		delete window.markers[eventId];
-		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 	}
 }
 
@@ -48,7 +48,7 @@ window.toggleTime = function() {
 
 function filterMarkers(val) {
 	// Filter out Markers
-	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 	for (var i = 0; i < events.length; i++) {
 		// Check that the date is within 2 hours of the slider time
 		var start_time = new Date();
@@ -70,7 +70,7 @@ function filterMarkers(val) {
 			if (event_time >= start_time && event_time < end_time){
 				window.markers[events[i]._id].setVisible(true);
 				$("#event-container_"+events[i]._id).css("display", "block");
-			} else{
+			}else{
 				window.markers[events[i]._id].setVisible(false);
 				$("#event-container_"+events[i]._id).css("display", "none");
 			}
@@ -82,7 +82,7 @@ Template.home.onCreated(function(){
 	// Set up Map
 	GoogleMaps.ready('map', function(map){
 		// Query Events
-		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 		window.map = map;
 
 		// Make the map reactive
@@ -418,5 +418,20 @@ Template.home.events({
 		}
 		eventsList=eventsList.fetch();
 		Session.set("events",eventsList);
+		
+		// Visible events list may have changed so update variable
+		events = Session.get("events");//Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+
+		// Hide all the markers
+		for (var m in window.markers)
+			window.markers[m].setVisible(false);
+		// If interval-view is on, filterMarkers on new events list
+		if ($("#time_checkbox")[0].checked){
+			filterMarkers($("#time_slider")[0].value);
+		} else {
+			// Otherwise, make all disappear and reappear only the ones on the event list
+			for (var i = 0; i < events.length; i++)
+				window.markers[events[i]._id].setVisible(true);
+		}
 	}
 });
