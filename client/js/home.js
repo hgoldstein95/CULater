@@ -20,10 +20,12 @@ window.addMarker = function (newEvent, open) {
 }
 
 window.removeMarker = function (eventId) {
-	window.markers[eventId].setMap(null);
-	google.maps.event.clearInstanceListeners(window.markers[eventId]);
-	delete window.markers[eventId];
-	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	if(window.markers[eventId]){
+		window.markers[eventId].setMap(null);
+		google.maps.event.clearInstanceListeners(window.markers[eventId]);
+		delete window.markers[eventId];
+		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	}
 }
 
 window.toggleTime = function() {
@@ -32,7 +34,7 @@ window.toggleTime = function() {
 		window.sliderMoved($("#time_slider")[0].value);
 	} else {
 		$("#time_slider").prop("disabled", true);
-		$("#slider_val").html("");
+		$("#slider-val").html("");
 		
 		// Show all events
 		for (var i = 0; i < events.length; i++) {
@@ -114,11 +116,11 @@ Template.home.onCreated(function(){
 		// Update Slider Label
 		var hours = (new Date().getHours()+parseInt(val))%24;
 		if (hours == 12)
-			$("#slider_val").html(hours+":00 PM");
+			$("#slider-val").html(hours+":00 PM");
 		else if (hours > 12)
-			$("#slider_val").html((hours-12)+":00 PM");
+			$("#slider-val").html((hours-12)+":00 PM");
 		else
-			$("#slider_val").html(hours+":00 AM");
+			$("#slider-val").html(hours+":00 AM");
 
 		filterMarkers(val);
 	}
@@ -130,7 +132,7 @@ Template.home.rendered = function() {
 			Router.go('/login');
 		}
 		Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
-	}, 250);
+	}, 500);
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
@@ -242,10 +244,12 @@ Template.home.helpers({
 			});
 		    
 		    /* Remove marker from map */
-			window.markers[eventId].setMap(null);
-			google.maps.event.clearInstanceListeners(window.markers[eventId]);
-			delete window.markers[eventId];
-			window.toggleTime();
+		    if(window.markers[eventId]){
+				window.markers[eventId].setMap(null);
+				google.maps.event.clearInstanceListeners(window.markers[eventId]);
+				delete window.markers[eventId];
+				window.toggleTime();
+			}
 			
 			return false;
 		}

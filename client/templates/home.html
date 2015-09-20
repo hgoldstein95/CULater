@@ -16,15 +16,16 @@
                   	{{> googleMap name="map" options=mapOptions}}
                   </div>
                   <div class="col-lg-8">
+                    <p id="slide-text">Slide to see what events are happening soon:</p>
                     <input id="time_slider" type="range" min="0" max="24" step="2" value="0" onchange="sliderMoved(this.value)" disabled/>
                   </div>
                   <div class="col-lg-4">
-                    <span class="col-lg-6" id="slider_val"></span>
-                    <span class="col-lg-6">
-                      <span>2-hr view</span>
-                      <input id="time_checkbox" onclick="toggleTime()" type="checkbox"/>
+                    <span class="col-lg-8">
+                      <span id="slide-text">2-hr view</span>
+                      <input id="time_checkbox" onclick="toggleTime()" type="checkbox" checked/>
                     </span>
                   </div>
+                  <div class="col-lg-6" id="slider-val"></div>
                 </div>
 
 
