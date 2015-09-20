@@ -1,7 +1,9 @@
 Meteor.startup(function() {
 	GoogleMaps.load();
 
-	Buildings = new Meteor.Collection('buildings')
+	Session.setDefault('names', []);
+
+	Buildings = new Meteor.Collection('buildings');
 
 	Meteor.subscribe('users');
 	Meteor.subscribe('events');
