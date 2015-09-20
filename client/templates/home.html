@@ -6,6 +6,10 @@
         <div class="container">
             <div class="row">
 
+              <div class="">
+
+              </div>
+
                 <div class="col-lg-8 col-sm-12">
                   <div id="map">
                   	{{> googleMap name="map" options=mapOptions}}
@@ -27,7 +31,7 @@
 
 
 
-                  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="overflow:scroll; height:400px;">
 
                     {{#each events}}
 
@@ -35,7 +39,7 @@
                         <div class="panel panel-default {{mine _id}}" id="event-container">
                           <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                              <a id="link_{{_id}}" onclick="updateMarkers({{_id}})" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{_id}}" aria-expanded="false" aria-controls="#{{_id}}">
                                 <span class="eventTitle">{{name}}</span>
                                 {{#if sameDay date}}
                                   <span class="badge" style="float:right">In {{getTimeToEvent startTime}} {{pluralize startTime}}</span>
@@ -52,12 +56,6 @@
                               <p>End Time: {{getTime endTime}}</p>
                               <p>Description: {{description}}</p>
                               <p>Location: {{location}}</p>
-                              <p>Number Attending: {{numAttending attendees}}</p>
-                              {{#if inEvent _id}}
-                                <button class='btn btn-danger' id='leave-button'>Leave</button>
-                              {{else}}
-                                <button class="btn btn-primary" id='join-button'>Join</button>
-                              {{/if}}
                               {{#if myEvent _id}}
                                 <a id="edit-event" data-toggle="modal" data-target="#form-modal" data-eventid="{{_id}}">Edit</a>
                                 <a id="delete-event" data-eventid="{{_id}}">Delete</a>
