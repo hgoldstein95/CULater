@@ -3,7 +3,8 @@ div#login-failure {text-align:center;display:none;}
 .navbar-default {
     background-color: #ffffff;
     border-color: #e7e7e7;
-} 
+    height: 60px;
+}
 
 div#parent {
 	overflow: hidden;
@@ -14,7 +15,12 @@ div#parent {
 	padding-left: 50px;
 	font-family: 'Sansita One', cursive;
 	font-size: 30px;
+  line-height: 30px;
 }
 .left {
 	overflow: hidden;
+}
+
+ul.nav li {
+  padding-top:5px;
 }
