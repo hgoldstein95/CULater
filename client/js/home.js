@@ -513,6 +513,9 @@ Template.home.events({
 				if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
 					$("#event-container_" + myEvents[i]._id).hide();
 				}
+				else{
+					$("#event-container_" + myEvents[i]._id).show();
+				}
 			}
 			//eventsList = Events.find( { $and: [ {attendees: Meteor.user()},{category:category} ] },{sort: {"date": 1, "startTime": 1}});
 		}
@@ -527,7 +530,9 @@ Template.home.events({
 			for(var i = 0; i < myEvents.length; i++){
 				if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
 					$("#event-container_" + myEvents[i]._id).hide();
-
+				}
+				else{
+					$("#event-container_" + myEvents[i]._id).show();
 				}
 			}
 
@@ -562,6 +567,9 @@ Template.home.events({
 					if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
 						$("#event-container_" + myEvents[i]._id).hide();
 					}
+					else{
+						$("#event-container_" + myEvents[i]._id).show();
+					}
 				}
 				//eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
@@ -572,7 +580,16 @@ Template.home.events({
 				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category:category} ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(attending && !category){
-				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
+				var myEvents = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } } ] },{sort: {"date": 1, "startTime": 1}}).fetch();
+				for(var i = 0; i < myEvents.length; i++){
+					if(myEvents[i].attendees.indexOf(Meteor.userId())==-1){
+						$("#event-container_" + myEvents[i]._id).hide();
+					}
+					else{
+						$("#event-container_" + myEvents[i]._id).show();
+					}
+				}
+				//eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() } ] },{sort: {"date": 1, "startTime": 1}})
 			}
 			if(large && !category){
 				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} } ] },{sort: {"date": 1, "startTime": 1}})
@@ -606,13 +623,13 @@ Template.home.events({
 		allEvents = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
 		var allEventNames = _.chain(allEvents).values().flatten().pluck("name").uniq().value();
 		var eventNames = _.chain(eventsList).values().flatten().pluck("name").uniq().value()
-		for(var i = 0; i < allEventNames.length; i++){
-			if(eventNames.indexOf(allEventNames[i])==-1){
-				var eventId = allEvents[i]._id;
-				$("#event-container_" + eventId).hide();
-			}
-			else{
-				if(!attending){
+		if(!attending){
+			for(var i = 0; i < allEventNames.length; i++){
+				if(eventNames.indexOf(allEventNames[i])==-1){
+					var eventId = allEvents[i]._id;
+					$("#event-container_" + eventId).hide();
+				}
+				else{
 					var eventId = allEvents[i]._id;
 					$("#event-container_" + eventId).show();
 				}
