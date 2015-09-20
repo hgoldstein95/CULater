@@ -24,9 +24,11 @@ Template.home.onCreated(function(){
 			  	markers[newEvent._id] = marker;
 			},
 			removed: function (oldEvent) {
-				markers[oldEvent._id].setMap(null);
-				google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
-				delete markers[oldEvent._id];
+				if(markers[oldEvent._id]){
+					markers[oldEvent._id].setMap(null);
+					google.maps.event.clearInstanceListeners(markers[oldEvent._id]);
+					delete markers[oldEvent._id];
+				}
 			},
 			changed: function (newEvent, oldEvent) {
 				// Remove old Marker
@@ -74,6 +76,7 @@ Template.home.rendered = function() {
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
+	Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
 };
 
 function tConvert (time) {
@@ -90,25 +93,40 @@ function tConvert (time) {
 
 Template.home.helpers({
 	'events': function() {
-        return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+        //return Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+        return Session.get("events");
     },
     'myEvent': function(eventId) {
-    	return Meteor.userId() == Events.findOne({_id: eventId}).adminId;
+    	if(Events.findOne({_id:eventId})){
+    		return Meteor.userId() == Events.findOne({_id: eventId}).adminId;
+    	}
     },
     'mine': function(eventId) {
-    	if( Meteor.userId() == Events.findOne({_id:eventId}).adminId){
-    		return "mine panel-info";
-    	}
+    	if(Events.findOne({_id:eventId})){
+	    	if( Meteor.userId() == Events.findOne({_id:eventId}).adminId){
+	    		return "mine panel-info";
+	    	}
+	    }
     	return "notMine panel-default";
     },
+    'isNotMine': function(eventId){
+    	if(Events.findOne({_id:eventId})){
+	    	if( Meteor.userId() == Events.findOne({_id:eventId}).adminId){
+	    		return false;
+	    	}
+	    	return true;
+	    }
+    },
     'largeEvent': function(eventId){
-    	if( !(Meteor.userId() == Events.findOne({_id:eventId}).adminId)){
-    		if(Events.findOne({_id:eventId})){
-    			return true;
-    		}
-    	}
-    	return false;
-    }
+    	if(Events.findOne({_id:eventId})){
+	    	if( !(Meteor.userId() == Events.findOne({_id:eventId}).adminId)){
+	    		if(Events.findOne({_id:eventId}).attendees.length>=100){
+	    			return "panel-danger";
+	    		}
+	    	}
+	    	return "";
+	    }
+    },
     'getDate': function(date) {
     	date = date.split('-');
     	var formatDate = new Date(date);
@@ -172,11 +190,28 @@ Template.home.helpers({
 		return {center: central_campus, zoom: 15};
 	},
 	inEvent: function(eventId) {
-		var attendees = Events.findOne({_id: eventId}).attendees;
-		return _.contains(attendees, Meteor.userId());
+		if(Events.findOne({_id:eventId})){
+			var attendees = Events.findOne({_id: eventId}).attendees;
+			return _.contains(attendees, Meteor.userId());
+		}
 	},
-	numAttending: function(attendees) {
-		return attendees.length;
+	getAdmin: function(userId){
+		return Meteor.users.findOne({_id: userId}).services.google.given_name + " " + Meteor.users.findOne({_id: userId}).services.google.family_name;
+	},
+    getAdminNetId: function(userId) {
+    	return Meteor.users.findOne({_id: userId}).services.google.email.split("@")[0];
+    },
+    datesPresent: function() {
+    	console.log("hello");
+    	var date1 = $("#date1").value;
+		var date2 = $("#date2").value;
+		if(date1 && date2){
+			return true;
+		}
+		return false;
+    },
+    'categoryNames': function() {
+		return ["Club Meeting","Study Group","Office Hours","Party","Other"];
 	}
 })
 
@@ -205,8 +240,8 @@ Template.home.events({
     },
 
 	'click a#delete-event': function(evt) {
-    $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
-    $('#dialogModal').modal();
+	    $('#dialogModal').data('eventid', $(evt.target).data('eventid'));
+	    $('#dialogModal').modal();
   	},
 
   	'click #label-switch': function(evt) {
@@ -218,7 +253,7 @@ Template.home.events({
 		var attendees = Events.findOne({_id: eventId}).attendees;
 		if(!_.contains(attendees, Meteor.userId())) {
 			attendees.push(Meteor.userId());
-			Events.update({'_id': eventId}, {$set: {'attendees': attendees}});
+			Events.update({'_id': eventId}, {$set: {'attendees': attendees, 'numAttendees': attendees.length}});
 		}
 	},
 	'click #leave-button': function(evt) {
@@ -226,6 +261,64 @@ Template.home.events({
 		var eventId = $(evt.target).parent().parent().attr('id');
 		var attendees = Events.findOne({_id: eventId}).attendees;
 		attendees.splice(attendees.indexOf(Meteor.userId()));
-		Events.update({'_id': eventId}, {$set: {'attendees': attendees}});
+		Events.update({'_id': eventId}, {$set: {'attendees': attendees, 'numAttendees': attendees.length}});
+	},
+	'change .checkbox': function(evt) {
+    	$('.checkbox').not($(evt.target)).prop('checked', false);  
+	},
+	'change .filter-field': function(evt) {
+		var all = document.getElementById("all").checked;
+		var attending = document.getElementById("attending").checked;
+		var large = document.getElementById("large").checked;
+		var my = document.getElementById("my").checked;
+		var date1 = document.getElementById("date1").value;
+		var date2 = document.getElementById("date2").value;
+		var category = document.getElementById("category").value;
+		console.log(category);
+		if(document.getElementById("time1")){
+			var time1 = document.getElementById("time1").value;
+			var time2 = document.getElementById("time2").value;
+		}
+		var eventsList = Events.find({},{sort: {"date": 1, "startTime": 1}});
+		if(attending){
+			eventsList = Events.find({attendees: Meteor.user()},{sort: {"date": 1, "startTime": 1}});
+		}
+		if(large){
+			eventsList = Events.find({numAttendees: { $gt: 99} },{sort: {"date": 1, "startTime": 1}});
+		}
+		if(my) {
+			eventsList = Events.find({adminId: Meteor.userId()},{sort: {"date": 1, "startTime": 1}});
+		}
+		if(date1 && date2){
+			$("#times-between").show();
+			var newTime1 = time1;
+			var newTime2 = time2;
+			if(!time1 || !time2){
+				newTime1 = "00:00";
+				newTime2 = "23:59";
+			}
+			var minutes1 = (parseInt(newTime1.split(":")[1]) - 1) + "";
+			var minutes2 = (parseInt(newTime2.split(":")[1]) + 1) + "";
+			var eventDate1 = new Date(date1.split("-")[0],date1.split("-")[1]-1,date1.split("-")[2], newTime1.split(":")[0], minutes1, 0);
+			var eventDate2 = new Date(date2.split("-")[0],date2.split("-")[1]-1,date2.split("-")[2], newTime2.split(":")[0], minutes2, 0);
+
+			if(all){
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{category: category} ] } ,{sort: {"date": 1, "startTime": 1}})
+			}
+			if(attending){
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ attendees: Meteor.user() },{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+			}
+			if(large){
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{ numAttendees: { $gt: 99} },{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+			}
+			if(my){
+				eventsList = Events.find( { $and: [ { dateObj: { $gt: eventDate1, $lt: eventDate2 } },{adminId: Meteor.userId()},{category: category} ] },{sort: {"date": 1, "startTime": 1}})
+			}
+		}
+		else{
+			$("#times-between").hide();
+		}
+		eventsList=eventsList.fetch();
+		Session.set("events",eventsList);
 	}
 });

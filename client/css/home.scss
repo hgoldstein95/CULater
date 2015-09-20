@@ -57,7 +57,42 @@
   float: right;
 }
 
+.checkbox {
+  display: block;
+  float: left;
+  margin-right: 5px!important;
+}
 
-#accordion {
+#filter-events {
+  position: absolute;
+  top:0;
+  right:15px;
+}
 
+.dropdown-menu {
+  padding:5px!important;
+}
+
+.and {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.date1-input, .time1-input{
+  margin-top:5px;
+}
+
+.date2-input, .time2-input{
+  margin-bottom:5px;
+}
+
+.filter-partition{
+  padding-bottom:15px;
+}
+
+.filter-header{
+  text-align: center;
+  padding-bottom: 5px;
+  margin: 0;
+  display: block;
 }

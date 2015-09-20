@@ -19,9 +19,73 @@
               
                
 
-                <div id="label-switch" class="make-switch" >
+                <!--<div id="label-switch" class="make-switch" >
                     <input id="event-checkbox" name="my-checkbox" type="checkbox" checked>
-                    {{checked}}
+                </div>-->
+                <div id="filter-events">
+                  <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Filter <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <div class="filter-partition" id="which-events">
+                        <p class="filter-header">Which Events</p>
+                        <div>
+                          <label>
+                            <input class="filter-field checkbox" id="all" type="checkbox" checked> All events
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            <input class="filter-field checkbox" id="attending" type="checkbox"> Events I'm Attending
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            <input class="filter-field checkbox" id="large" type="checkbox"> Large Events (more than 100 attendees)
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            <input class="filter-field checkbox" id="my" type="checkbox"> My Events
+                          </label>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="filter-partition" id="dates-between">
+                        <p class="filter-header">Date Between</p>
+                        <div class="date1-input">
+                          <input type="date" class="form-control filter-field" id="date1">
+                        </div>
+                        <p class="and"> and </p>
+                        <div class="date2-input">
+                          <input type="date" class="form-control filter-field" id="date2">
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                        <div class="filter-partition" id="times-between" style="display:none;">
+                          <p class="filter-header">Time Between</p>
+                          <div class="time1-input">
+                            <input type="time" class="form-control filter-field" id="time1">
+                          </div>
+                          <p class="and"> and </p>
+                          <div class="time2-input">
+                            <input type="time" class="form-control filter-field" id="time2">
+                          </div>
+                        </div>
+                    </li>
+                    <li>
+                      <div class="filter-partition" id="category-container">
+                          <p class="filter-header">Category</p>
+                          <select id="category" class="form-control">
+                            {{#each categoryNames}}
+                              <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                    </li>
+                  </ul>
                 </div>
                 
 
@@ -47,17 +111,20 @@
                           </div>
                           <div id="{{_id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="#{{_id}}">
                             <div class="panel-body">
+                              <p>Creator: {{getAdmin adminId}} - {{getAdminNetId adminId}}</p>
                               <p>{{getDate date}}</p>
                               <p>{{getTime startTime}} - {{getTime endTime}}</p>
                               <p>{{location}}</p>
                               <br>
                               <p>{{description}}</p>
                               <br>
-                              <p>{{numAttending attendees}} attending.</p>
-                              {{#if inEvent _id}}
-                                <button class='btn btn-danger' id='leave-button'>Leave</button>
-                              {{else}}
-                                <button class="btn btn-primary" id='join-button'>Join</button>
+                              <p>{{numAttendees}} attending.</p>
+                              {{#if isNotMine _id}}
+                                {{#if inEvent _id}}
+                                  <button class='btn btn-danger' id='leave-button'>Leave</button>
+                                {{else}}
+                                  <button class="btn btn-primary" id='join-button'>Join</button>
+                                {{/if}}
                               {{/if}}
                               {{#if myEvent _id}}
                                 <a id="edit-event" data-toggle="modal" data-target="#form-modal" data-eventid="{{_id}}">Edit</a>

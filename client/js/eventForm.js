@@ -20,6 +20,7 @@ Template.eventForm.events({
   	var startTime = evt.target.eventStartTime.value;
   	var endTime = evt.target.eventEndTime.value;
   	var attendees = [];
+  	var category = evt.target.eventCategory.value;
   	var eventDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
   	var endDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
   	var currentDate = new Date();
@@ -48,12 +49,16 @@ Template.eventForm.events({
       	latitude: latitude,
       	longitude: longitude,
     	date: date,
+    	dateObj: eventDate,
     	startTime: startTime,
     	endTime: endTime,
-    	attendees: attendees
+    	attendees: attendees,
+    	numAttendees: attendees.length,
+    	category: category
     });
     $("#modal-close").click();
     $("form")[0].reset();
+    Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
   },
 
   'submit form.edit-event': function(evt) {
@@ -66,6 +71,15 @@ Template.eventForm.events({
   	var startTime = evt.target.eventStartTime.value;
   	var endTime = evt.target.eventEndTime.value;
   	var attendees = [];
+  	var category = evt.target.eventCategory.value;
+
+  	var eventDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], startTime.split(":")[0], startTime.split(":")[1], 0);
+  	var endDate = new Date(date.split("-")[0],date.split("-")[1]-1,date.split("-")[2], endTime.split(":")[0], endTime.split(":")[1], 0);
+  	var currentDate = new Date();
+  	if(eventDate < currentDate || endDate <= eventDate || !name || !location || !date || !startTime || !endTime){
+  		$("#error-messages").show();
+  		return;
+  	}
 
     // Trashy way to get lat/lon
     var latitude = undefined;
@@ -84,19 +98,23 @@ Template.eventForm.events({
         }, {
             $set: {
                 adminId: Meteor.userId(),
-		    	name: name,
+    			name: name,
 		    	description: description,
 		    	location: location,
-          latitude: latitude,
-          longitude: longitude,
+		      	latitude: latitude,
+		      	longitude: longitude,
 		    	date: date,
+		    	dateObj: eventDate,
 		    	startTime: startTime,
 		    	endTime: endTime,
-		    	attendees: attendees
+		    	attendees: attendees,
+		    	numAttendees: attendees.length,
+		    	category: category
             }
         });
     $("#modal-close").click();
     $("form")[0].reset();
+    Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
   }
 });
 
@@ -118,6 +136,9 @@ Template.eventForm.helpers({
 
 		t = yyyy + "-" + mm+'-'+dd;
 		return t;
+	},
+	'categoryNames': function() {
+		return ["Club Meeting","Study Group","Office Hours","Party","Other"];
 	},
   'locationNames': function() {
     return Session.get('names');

@@ -6,5 +6,6 @@ Template.dialogModal.events({
         _id: eventId
       });
     }
+    Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
   }
 });

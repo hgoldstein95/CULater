@@ -19,7 +19,7 @@
 
             <div class="form-group">
               <label for="eventName">Event Name*</label>
-              <input type="text" class="form-control" id="eventName" placeholder="E.g. Big Red Hacks">
+              <input type="text" class="form-control" id="eventName" placeholder="E.g. Big Red Hacks" maxlength="25">
             </div>
             <div class="form-group">
               <label for="eventDescription">Event Description</label>
@@ -44,6 +44,14 @@
             <div class="form-group">
               <label for="eventTime">End Time*</label>
               <input type="time" id="eventEndTime">
+            </div>
+            <div class="form-group">
+              <label for="eventCategory">Category*</label>
+              <select id="eventCategory" class="form-control">
+                {{#each categoryNames}}
+                  <option value="{{this}}">{{this}}</option>
+                {{/each}}
+              </select>
             </div>
             <button type="submit" id="event-submit" class="btn btn-default">Submit</button>
             <div style="display:none;">
