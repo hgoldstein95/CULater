@@ -11,6 +11,10 @@
                   <div id="map">
                   	{{> googleMap name="map" options=mapOptions}}
                   </div>
+                  <span>
+                    <input id="time_slider" type="range" min="0" max="24" step="2" value="0" onchange="sliderMoved(this.value)"/>
+                    <span id="slider_val"></span>
+                  </span>
                 </div>
 
 

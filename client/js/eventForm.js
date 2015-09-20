@@ -99,6 +99,24 @@ Template.eventForm.events({
         });
     $("#modal-close").click();
     $("form")[0].reset();
+
+    // Remove old marker
+    window.removeMarker(eventId);
+
+    // Create new marker
+    window.addMarker({
+      _id: eventId,
+      adminId: Meteor.userId(),
+      name: name,
+      description: description,
+      location: location,
+      latitude: latitude,
+      longitude: longitude,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      attendees: attendees
+    }, true);
   }
 });
 

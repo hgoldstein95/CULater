@@ -5,6 +5,9 @@ Template.dialogModal.events({
       Events.remove({
         _id: eventId
       });
+
+      /* Remove marker from map */
+	  window.removeMarker(eventId);
     }
   }
 });
