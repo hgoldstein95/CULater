@@ -51,11 +51,18 @@
                           </div>
                           <div id="{{_id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="#{{_id}}">
                             <div class="panel-body">
-                              <p>Date: {{getDate date}}</p>
-                              <p>Start Time: {{getTime startTime}}</p>
-                              <p>End Time: {{getTime endTime}}</p>
-                              <p>Description: {{description}}</p>
-                              <p>Location: {{location}}</p>
+                              <p>{{getDate date}}</p>
+                              <p>{{getTime startTime}} - {{getTime endTime}}</p>
+                              <p>{{location}}</p>
+                              <br>
+                              <p>{{description}}</p>
+                              <br>
+                              <p>{{numAttending attendees}} attending.</p>
+                              {{#if inEvent _id}}
+                                <button class='btn btn-danger' id='leave-button'>Leave</button>
+                              {{else}}
+                                <button class="btn btn-primary" id='join-button'>Join</button>
+                              {{/if}}
                               {{#if myEvent _id}}
                                 <a id="edit-event" data-toggle="modal" data-target="#form-modal" data-eventid="{{_id}}">Edit</a>
                                 <a id="delete-event" data-eventid="{{_id}}">Delete</a>
