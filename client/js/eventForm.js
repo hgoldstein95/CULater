@@ -41,30 +41,34 @@ Template.eventForm.events({
       i++;
     }
 
-    Events.insert({
-    	adminId: Meteor.userId(),
-    	name: name,
-    	description: description,
-    	location: location,
-      	latitude: latitude,
-      	longitude: longitude,
-    	date: date,
-    	dateObj: eventDate,
-    	startTime: startTime,
-    	endTime: endTime,
-    	attendees: attendees,
-    	numAttendees: attendees.length,
-    	category: category
+    var newEvent = {
+      adminId: Meteor.userId(),
+      name: name,
+      description: description,
+      location: location,
+        latitude: latitude,
+        longitude: longitude,
+      date: date,
+      dateObj: eventDate,
+      startTime: startTime,
+      endTime: endTime,
+      attendees: attendees,
+      numAttendees: attendees.length,
+      category: category
+    };
+
+    Events.insert(newEvent, function (err, newId) {
+      newEvent._id = newId;
+      Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
+
+      // Create new marker on map
+      window.addMarker(newEvent, false);
+      // Switch to viewing all events
+      $("#time_checkbox").attr("checked", false);
+      window.toggleTime();
     });
     $("#modal-close").click();
     $("form")[0].reset();
-    Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
-
-    // Create new marker on map
-    window.addMarker(newEvent, false);
-    // Switch to viewing all events
-    $("#time_checkbox").attr("checked", false);
-    window.toggleTime();
   },
 
   'submit form.edit-event': function(evt) {
