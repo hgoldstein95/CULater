@@ -20,10 +20,12 @@ window.addMarker = function (newEvent, open) {
 }
 
 window.removeMarker = function (eventId) {
-	window.markers[eventId].setMap(null);
-	google.maps.event.clearInstanceListeners(window.markers[eventId]);
-	delete window.markers[eventId];
-	events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	if(window.markers[eventId]){
+		window.markers[eventId].setMap(null);
+		google.maps.event.clearInstanceListeners(window.markers[eventId]);
+		delete window.markers[eventId];
+		events = Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch();
+	}
 }
 
 window.toggleTime = function() {
@@ -161,7 +163,7 @@ Template.home.rendered = function() {
 			Router.go('/login');
 		}
 		Session.set('events',Events.find({},{sort: {"date": 1, "startTime": 1}}).fetch())
-	}, 250);
+	}, 500);
 	$("[name='my-checkbox']").bootstrapSwitch();
 	$(".bootstrap-switch-handle-on").html("All");
 	$(".bootstrap-switch-handle-off").html("My");
@@ -273,10 +275,12 @@ Template.home.helpers({
 			});
 		    
 		    /* Remove marker from map */
-			window.markers[eventId].setMap(null);
-			google.maps.event.clearInstanceListeners(window.markers[eventId]);
-			delete window.markers[eventId];
-			window.toggleTime();
+		    if(window.markers[eventId]){
+				window.markers[eventId].setMap(null);
+				google.maps.event.clearInstanceListeners(window.markers[eventId]);
+				delete window.markers[eventId];
+				window.toggleTime();
+			}
 			
 			return false;
 		}
